@@ -32,6 +32,7 @@ API完全遵循HTTP 状态码协议规定，不同响应码：
 400 | Error，出现错误，会带上错误消息
 403 | Forbidden，没有访问资源的权限
 404 | Not Found，没有发现资源
+405 | Method Not Allowed
 500 | Internal Server Error，系统错误，服务器停止
 
 ## 错误消息

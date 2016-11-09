@@ -1,62 +1,45 @@
 # 用户
-1. 获取认证用户信息
-2. 获取所有用户信息
-3. 获取认证用户的所有令牌信息
+1. /v2/user
+2. /v2/users
+3. /v2/users/{user_id}
+4. /v2/user/token
+5. /v2/users/{user_id}/token
 
-所有请求必须包含认证信息。
-## 获取认证用户信息
-列出当前认证用户的用户信息
+所有请求必须包含令牌认证信息。
 
-	GET /v2/user
-	
-### 响应
-	Status: 200 OK
-```
-{
-  "user_id": "057ee4457d754b049c1bbfb4ddd5412a",
-  "created_at": "2016-10-26T02:27:33Z" 
-}
-```
+WIO用户系统基于SSO（Single Sign On）机制做用户管理。这种机制很适合用WIO开发你自己的IOT应用，不需要重复登陆和认证。
 
-## 获取所有用户信息
-以创建用户顺序列出所有用户信息。  
-注意只有认证用户为系统管理员时，才会返回所有用户信息。
+当请求任何一条WIO API时，WIO会先向wio数据库查询令牌是否有效，如果没有发现，则向SSO系统验证或者本地验证JWT类型令牌，并提取用户ID，令牌过期时间等信息，然后在Wio数据库创建用户和用户令牌数据。
 
-	GET /v2/users
-	
-### 响应
-	Status: 200 OK
-	Link: <http://wio.seeed.io/v2/resource?page=2>; rel="next",
-	      <http://wio.seeed.io/v2/resource?page=5>; rel="last"
-```
-{
-  "users": [
-    {
-      "user_id": "057ee4457d754b049c1bbfb4ddd5412a",
-      "created_at": "2016-10-26T02:27:33Z"
-    }
-  ]
-}
-```
+建立你的SSO系统指南：[指南]()
 
-## 获取认证用户的所有令牌信息
+## /v2/user
+### GET 获取认证用户信息
+列出当前认证令牌的用户信息.
+### DEL 删除认证用户
+删除当前用户，同时会删除用户所有的节点设备和项目数据，请小心使用。
 
-	GET /v2/user/tokens
-	
-### 响应
-	Status: 200 OK
-	Link: <http://wio.seeed.io/v2/resource?page=2>; rel="next",
-	      <http://wio.seeed.io/v2/resource?page=5>; rel="last"
-```
-{
-  "tokens": [
-    {
-      "token": "347ee4457d754b049c1ccfb4ddd5413d",
-      "user_id": "057ee4457d754b049c1bbfb4ddd5412a",
-      "expire": 0,
-      "created_at": "2016-10-26T02:27:33Z",
-      "updated_at": "2016-10-26T02:27:33Z"
-    }
-  ]
-}
-```
+## /v2/users
+### GET 获取所有用户信息
+以用户创建的时间顺序列出所有用户。
+> 只有认证用户为系统管理员时，才会返回所有用户信息。如何[添加管理员]()
+
+参数 | 描述
+----|---
+page|请求第几页
+per_page|每一页的数量
+
+## /v2/users/{user_id}
+> 需要此用户权限或者管理员权限
+
+### GET 获取指定用户
+### DEL 删除指定用户
+删除用户同时会删除用户所有的节点设备和项目数据，请小心使用。
+
+## /v2/user/tokens
+### GET 获取认证用户的所有令牌信息
+
+## /v2/users/{user_id}/token
+> 需要此用户权限或者管理员权限
+
+### GET 获取指定用户的的令牌信息
