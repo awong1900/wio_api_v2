@@ -1,137 +1,99 @@
 # 节点设备
-1. 获取用户的所有节点设备
-2. 创建新设备
-3. 获取
-4. 更新
-5. 删除一个节点设备
+1. /v2/things
+2. /v2/things/{thing_id}
+4. /v2/things/{thing_id}/page
+5. /v2/things/{thing_id}/ota
 
-所有请求需要认证信息
-## 获取用户的所有节点设备
-列出所有认证用户下的所有节点设备
+> 所有请求需要认证信息
 
-	GET /v2/things
-	
-### 响应
-	Status: 200 OK
-	Link: <http://wio.seeed.io/v2/resource?page=2>; rel="next",
-	      <http://wio.seeed.io/v2/resource?page=5>; rel="last"
-```
-{
-  "things": [
-    {
-      "thing_id": "18b8a510ee1a49eea3ef5a4dd33d33ef",
-      "user_id": "057ee4457d754b049c1bbfb4ddd5412a",
-      "firmware_id": null,
-      "key": "31d9139c46f64a6a87cdaffd9f6db32b",
-      "name": "",
-      "board": "WioLink v1.0",
-      "online": false,
-      "pp_id": null,
-      "well_known": "",
-      "shared": false,
-      "created_at": "2016-10-27T08:16:06Z",
-      "updated_at": "2016-10-27T08:16:06Z"
-    }    
-  ]
-}
-```
+## /v2/things
+### GET 获取用户的所有节点设备
+列出认证用户的所有节点设备
 
-## 创建新设备
+| 参数 | 类型 | 描述 |
+| ----|---- | ---- |
+| page | int | 显示第几页 |
+| per_page | int | 每一页显示数量 |
+| sort | string | 默认created_at倒序，[sort格式]() |
 
-	POST /v2/things
-	
-### 输入
+### POST 创建新设备
+根据输入创建一个节点设备。
+
+#### 输入
 | 名字 | 类型 | 描述 |
 | ------| ------ | ------ |
-| board | string | **Required**. 节点设备型号名字 |
+| board | string | **必须**. 节点设备型号 |
 | name | string | 节点设备名字 |
 
-### 例子
+#### 例子
 ```
 {
-  "board": "WioLink v1.0"
-}
-```
-### 响应
-	Status: 201 Created
-	Location: https://wio.seeed.io/v2/things/473a3a7ec7a54a33b60e4a57be5d0a27
-```
-{
-  "thing_id": "473a3a7ec7a54a33b60e4a57be5d0a27",
-  "user_id": "057ee4457d754b049c1bbfb4ddd5412a",
-  "firmware_id": null,
-  "key": "6cf42c96de4c4250864ec4eabf7fca26",
-  "name": "",
   "board": "WioLink v1.0",
-  "online": false,
-  "pp_id": null,
-  "well_known": "",
-  "shared": false,
-  "created_at": "2016-10-27T08:24:36Z",
-  "updated_at": "2016-10-27T08:24:36Z"
+  "name": "myWio"
 }
 ```
 
-## 获取
+## /v2/things/:thing_id
+> 必须是认证用户的节点设备
 
-	GET /v2/things/:thing_id
-	
-### 响应
-	Status: 200 OK
-```
-{
-  "thing_id": "473a3a7ec7a54a33b60e4a57be5d0a27",
-  "user_id": "057ee4457d754b049c1bbfb4ddd5412a",
-  "firmware_id": null,
-  "key": "6cf42c96de4c4250864ec4eabf7fca26",
-  "name": "",
-  "board": "WioLink v1.0",
-  "online": false,
-  "pp_id": null,
-  "well_known": "",
-  "shared": false,
-  "created_at": "2016-10-27T08:24:36Z",
-  "updated_at": "2016-10-27T08:24:36Z"
-}
-```
-
-## 更新
-
-	PATCH /v2/things/:thing_id
-	
-### 输入
+### GET 获取节点设备信息
+#### 输入
 | 名字 | 类型 | 描述 |
 | ------| ------ | ------ |
 | name | string | 节点设备名字 |
 
-### 例子
+#### 例子
 ```
 {
-  "name": "wio_2016"
-}
-```
-### 响应
-	Status: 200 OK
-```
-{
-  "thing_id": "473a3a7ec7a54a33b60e4a57be5d0a27",
-  "user_id": "057ee4457d754b049c1bbfb4ddd5412a",
-  "firmware_id": null,
-  "key": "6cf42c96de4c4250864ec4eabf7fca26",
-  "name": "wio_2016",
-  "board": "WioLink v1.0",
-  "online": false,
-  "pp_id": null,
-  "well_known": "",
-  "shared": false,
-  "created_at": "2016-10-27T08:24:36Z",
-  "updated_at": "2016-10-27T08:34:59Z"
+  "name": "myWio"
 }
 ```
 
-## 删除一个节点设备
+### PATCH 更新节点设备信息
+#### 输入
+| 名字 | 类型 | 描述 |
+| ------| ------ | ------ |
+| name | string | 节点设备名字 |
 
-	DELETE /v2/things/:thing_id
-	
-### 响应
-	Status: 204 No Content
+#### 例子
+```
+{
+  "name": "myWio2"
+}
+```
+
+#### DEL 删除节点设备
+
+## /v2/things/{thing_id}/page
+### GET 获取节点设备的API页面
+
+## /v2/things/{thing_id}/ota
+OTA (Over-The-Air) 在线升级功能是WIO系统最重要的功能之一。当你完成固件开发，可以通过OTA把固件下载到设备中。
+### GET 获得当前的OTA设置和状态
+### PATCH 修改OTA设置
+| 名字 | 类型 | 描述 |
+| ------| ------ | ------ |
+| firmware_id | string | 升级固件项目ID |
+| cancel | boolean | `True` 取消升级 |
+| ota_at | datetime | 定义升级时间 |
+
+#### 例子
+```
+{
+  "firmware_id": "000",
+  "ota_at": "2018-02-01T01:00Z"
+}
+```
+### POST 启动OTA
+| 名字 | 类型 | 描述 |
+| ------| ------ | ------ |
+| firmware_id | string | 升级固件项目ID |
+| ota_at | datetime | 定义升级时间 |
+
+#### 例子
+```
+{
+  "firmware_id": "000",
+  "ota_at": "2018-02-01T01:00Z"
+}
+```
