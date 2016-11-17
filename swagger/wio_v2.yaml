@@ -2,8 +2,10 @@
 swagger: '2.0'
 info:
   version: 0.0.1
-  title: Simple API
-host: localhost:16080
+  title: Wio API v2
+schemes:
+  - https
+host: wio.forkthings.com
 paths:
   /v2/user:
     get:
@@ -12,6 +14,12 @@ paths:
       responses:
         200:
           description: OK
+    delete:
+      security:
+        - access_token: []
+      responses:
+        200:
+          description: OK    
           
 securityDefinitions:
   # Authorization:
