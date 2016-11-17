@@ -1,0 +1,24 @@
+---
+swagger: '2.0'
+info:
+  version: 0.0.1
+  title: Simple API
+host: localhost:16080
+paths:
+  /v2/user:
+    get:
+      security:
+        - access_token: []
+      responses:
+        200:
+          description: OK
+          
+securityDefinitions:
+  # Authorization:
+  #   type: apiKey
+  #   in: header
+  #   name: Authorization
+  access_token:
+    type: apiKey
+    in: query
+    name: access_token
