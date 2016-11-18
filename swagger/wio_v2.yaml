@@ -50,7 +50,7 @@ info:
     	
     ## 时间格式
     时间采用`ISO8601`格式。如`YYYY-MM-DDTHH:MM:SSZ`
-  
+    
 schemes:
   - https
 host: wio.forkthings.com
@@ -64,14 +64,16 @@ paths:
       responses:
         200:
           description: OK
+          schema:
+            $ref: '#/definitions/user'
     delete:
       tags:
         - users
       security:
         - access_token: []
       responses:
-        200:
-          description: OK  
+        204:
+          description: No content
   /v2/users:
     get:
       tags:
@@ -126,11 +128,14 @@ paths:
         - things
       security:
         - access_token: []
-      summary: sd
-      description: sdf
+      # summary: sd
+      # description: sdf
       responses:
         200:
           description: OK
+          schema:
+            items:
+              $ref: '#/definitions/thing'
     
     post:
       tags:
@@ -151,14 +156,27 @@ paths:
       responses:
         201:
           description: Created
-    
-  # /v2/things/{thing_id}:
-  #   get:
-  #     summary: 
-  #     description: 
-  #     responses:
-  #       200:
-  #         description: OK
+          schema:
+            $ref: '#/definitions/thing'
+  /v2/things/{thing_id}:
+    get:
+      tags:
+        - things
+      security:
+        - access_token: []
+      summary: 获取节点设备信息
+      # description: 
+      parameters:
+        - name: thing_id
+          in: path
+          description: ID of thing
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/thing'
     
   #   patch:
   #     summary: 
@@ -204,6 +222,30 @@ securityDefinitions:
     in: query
     name: access_token
 definitions:
+  user:
+    type: object
+    properties:
+      user_id:
+        type: string
+      created_at:
+        type: string
+        format: dateTime
+  userToken:
+    type: object
+    properties:
+      user_id:
+        type: string
+      token:
+        type: string
+      expire:
+        type: string
+        format: dateTime
+      created_at:
+        type: string
+        format: dateTime
+      updated_at:
+        type: string
+        format: dateTime
   newThing:
     type: object
     required:
@@ -213,4 +255,30 @@ definitions:
         type: string
       name:
         type: string
-        
+  thing:
+    type: object
+    properties:
+      thing_id:
+        type: string
+      user_id:
+        type: string
+      firmware_id:
+        type: string
+      key:
+        type: string
+      name:
+        type: string
+      board:
+        type: string
+      online:
+        type: boolean
+      pp_id:
+        type: string
+      page_url:
+        type: string
+      created_at:
+        type: string
+        format: dateTime
+      updated_at:
+        type: string
+        format: dateTime
