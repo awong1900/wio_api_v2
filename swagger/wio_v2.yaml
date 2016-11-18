@@ -706,6 +706,12 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/connection"
+    required:
+      - board_name
+      - connections
+    example:
+      board_name: Wio Link v1.0
+      connections: []
   connection:
     type: object
     properties:
@@ -713,6 +719,12 @@ definitions:
         type: string
       port:
         type: string
+    required:
+      - sku
+      - port
+    example:
+      sku: 101020019-ffff
+      port: D0
   newConfig:
     type: object
     properties:
