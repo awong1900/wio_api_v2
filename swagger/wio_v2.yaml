@@ -58,6 +58,7 @@ tags:
   - name: users
   - name: things
   - name: firmwares
+  - name: misellaneous
 paths:
   /v2/user:
     get:
@@ -126,6 +127,7 @@ paths:
       responses:
         200:
           description: OK        
+  
   /v2/things:
     get:
       tags:
@@ -215,7 +217,6 @@ paths:
   #     responses:
   #       200:
   #         description: OK
-
   /v2/things/{thing_id}/ota:
     parameters:
       - name: thing_id
@@ -224,11 +225,16 @@ paths:
         required: true
         type: string
     get:
+      tags:
+        - things
+      security:
+        - access_token: []
       # summary: 
       # description: 
       responses:
         200:
           description: OK
+  
   /v2/firmwares:
     get:
       tags:
@@ -302,7 +308,6 @@ paths:
       responses:
         204:
           description: No content
-    
   /v2/firmwares/{firmware_id}/ulbs:
     parameters:
       - name: firmware_id
@@ -311,6 +316,10 @@ paths:
         required: true
         type: string
     get:
+      tags:
+        - firmwares
+      security:
+        - access_token: []
       # summary: 
       # description: 
       responses:
@@ -319,7 +328,6 @@ paths:
           schema:
             items:
               $ref: "#/definitions/ulb"
-    
   /v2/firmwares/{firmware_id}/ulbs/{path_name}:
     parameters:
       - name: firmware_id
@@ -334,6 +342,10 @@ paths:
         type: string
         required: true
     get:
+      tags:
+        - firmwares
+      security:
+        - access_token: []
       # summary: 
       # description: 
       responses:
@@ -355,9 +367,11 @@ paths:
               {
               
               }
-              
-            
     put:
+      tags:
+        - firmwares
+      security:
+        - access_token: []
       # summary: 
       # description: 
       responses:
@@ -366,6 +380,10 @@ paths:
           schema:
             $ref: "#/definitions/ulb" 
     delete:
+      tags:
+        - firmwares
+      security:
+        - access_token: []
       # summary: 
       # description: 
       responses:
@@ -379,18 +397,22 @@ paths:
         required: true
         type: string
     get:
+      tags:
+        - firmwares
+      security:
+        - access_token: []
       summary: 编译固件
       description: 系统会现查找是否存在已经编译好的固件，如果没有，则开始一个编译任务。因此会先返回`202 Accepted`, 当完成后会返回`201 Created`。
       responses:
-        202:
-          description: Accepted
-          schema:
-            $ref: "#/definitions/binState"
         201:
           description: Created
           schema:
             $ref: "#/definitions/bin"
-            
+        202:
+          description: Accepted
+          schema:
+            $ref: "#/definitions/binState"
+
   # /v2/firmwares/{firmware_id}/import:
     # parameters:
     #   - name: firmware_id
@@ -405,6 +427,174 @@ paths:
     #     description: ID of firmware
     #     required: true
     #     type: string
+    
+  /v2/drivers:
+    get:
+      tags:
+        - misellaneous
+      # summary: 
+      # description: 
+      responses:
+        200:
+          description: OK
+          examples:
+            application/json:
+              {
+                "drivers": [
+                  {
+                    "SKU": "105020005",
+                    "ConstructArgList": [
+                      "int pin"
+                    ],
+                    "Author": "SEEED",
+                    "Writes": {
+                      "write_onoff": {
+                        "Arguments": [
+                          [
+                            "int",
+                            "onoff"
+                          ]
+                        ]
+                      }
+                    },
+                    "ClassName": "GroveEL",
+                    "Events": {},
+                    "Files": [
+                      "grove_el_driver.h",
+                      "grove_el_driver.cpp"
+                    ],
+                    "Description": "Grove - EL Driver is designed for driving EL Wires.It integrates a very small inverter to drive the EL Wire, so you can easily light up the EL Wire with just one single Grove cable.",
+                    "AddedAt": 1443657600,
+                    "HasPowerOffFunc": false,
+                    "HasPowerOnFunc": false,
+                    "InterfaceType": "GPIO",
+                    "GroveName": "Grove-EL Driver",
+                    "ImageURL": "https://raw.githubusercontent.com/Seeed-Studio/Grove_Drivers_for_Wio/static/images/grove-el-driver.jpg",
+                    "CanGetLastError": false,
+                    "HackGuideURL": "",
+                    "WikiURL": "http://www.seeedstudio.com/wiki/Grove_-_EL_Driver",
+                    "ClassFile": "grove_el_driver.h",
+                    "Reads": {
+                      "read_onoff_status": {
+                        "Raw": [
+                          "int *onoff"
+                        ],
+                        "Returns": [
+                          [
+                            "int",
+                            "onoff"
+                          ]
+                        ],
+                        "Arguments": []
+                      }
+                    },
+                    "NeedHack": false,
+                    "HasEvent": false,
+                    "IncludePath": "grove_drivers/grove_el_driver"
+                  }
+                ]
+              }
+  /v2/boards:
+    get:
+      tags:
+        - misellaneous
+      # summary: 
+      # description: 
+      responses:
+        200:
+          description: OK
+          examples:
+            application/json:
+              {
+                "boards": [
+                  {
+                    "board_platform": "ESP8266",
+                    "board_flash_spi_mode": "QIO",
+                    "board_builtin": {
+                      "FUNCTION_KEY": 0,
+                      "STATUS_LED": 2,
+                      "GROVE_POWER_SWITCH": 15
+                    },
+                    "interfaces": {
+                      "UART0": {
+                        "pintx": 1,
+                        "pinrx": 3,
+                        "type": "UART"
+                      },
+                      "D2": {
+                        "type": "GPIO",
+                        "pin": 13
+                      },
+                      "A0": {
+                        "type": "ANALOG",
+                        "pin": 17
+                      },
+                      "I2C0": {
+                        "pinscl": 5,
+                        "type": "I2C",
+                        "pinsda": 4
+                      },
+                      "D0": {
+                        "type": "GPIO",
+                        "pin": 14
+                      },
+                      "D1": {
+                        "type": "GPIO",
+                        "pin": 12
+                      }
+                    },
+                    "board_name": "Wio Link v1.0",
+                    "board_firmware_dir": "firmware_esp",
+                    "board_flash_map": 6,
+                    "board_vendor": "seeedstudio",
+                    "board_flash_spi_speed": 40
+                  },
+                  {
+                    "board_platform": "ESP8266",
+                    "board_flash_spi_mode": "QIO",
+                    "board_builtin": {
+                      "FUNCTION_KEY": 0,
+                      "STATUS_LED": 2,
+                      "GROVE_POWER_SWITCH": 15
+                    },
+                    "interfaces": {
+                      "A0": {
+                        "type": "ANALOG",
+                        "pin": 17
+                      },
+                      "UART0": {
+                        "pintx": 1,
+                        "pinrx": 3,
+                        "type": "UART"
+                      },
+                      "I2C0": {
+                        "pinscl": 3,
+                        "type": "I2C",
+                        "pinsda": 1
+                      },
+                      "I2C1": {
+                        "pinscl": 5,
+                        "type": "I2C",
+                        "pinsda": 4
+                      },
+                      "D0": {
+                        "type": "GPIO",
+                        "pin": 3
+                      },
+                      "D1": {
+                        "type": "GPIO",
+                        "pin": 5
+                      }
+                    },
+                    "board_name": "Wio Node v1.0",
+                    "board_firmware_dir": "firmware_esp",
+                    "board_flash_map": 6,
+                    "board_vendor": "seeedstudio",
+                    "board_flash_spi_speed": 40
+                  }
+                ]
+              }
+    
 securityDefinitions:
   # Authorization:
   #   type: apiKey
