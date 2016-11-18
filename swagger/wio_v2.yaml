@@ -19,8 +19,113 @@ paths:
         - access_token: []
       responses:
         200:
-          description: OK    
+          description: OK  
+  /v2/users:
+    get:
+      security:
+        - access_token: []
+      responses:
+        200:
+          description: OK
+  /v2/users/{user_id}:
+    get:
+      security:
+        - access_token: []
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+  /v2/user/token:
+    get:
+      security:
+        - access_token: []
+      responses:
+        200:
+          description: OK
+  /v2/user/{user_id}/token:
+    get:
+      security:
+        - access_token: []
+      parameters:
+        - name: user_id
+          in: path
+          description: ID of user
+          required: true
+          type: string        
+      responses:
+        200:
+          description: OK        
+  /v2/things:
+    get:
+      security:
+        - access_token: []
+      summary: sd
+      description: sdf
+      responses:
+        200:
+          description: OK
+    
+    post:
+      security:
+        - access_token: []
+      # summary: sdf
+      # description: 12
+      produces:
+        - application/json
+      parameters:
+        - name: thing
+          in: body
+          # description: Pet to add to the store
+          required: true
+          schema:
+            $ref: '#/definitions/newThing'        
+      responses:
+        201:
+          description: Created
+    
+  # /v2/things/{thing_id}:
+  #   get:
+  #     summary: 
+  #     description: 
+  #     responses:
+  #       200:
+  #         description: OK
+    
+  #   patch:
+  #     summary: 
+  #     description: 
+  #     responses:
+  #       200:
+  #         description: OK
           
+  #   delete:
+  #     summary: 
+  #     description: 
+  #     responses:
+  #       200:
+  #         description: OK
+    
+  # /v2/things/{thing_id}/page:
+  #   get:
+  #     summary: 
+  #     description: 
+  #     responses:
+  #       200:
+  #         description: OK
+    
+  # /v2/things/{thing_id}/ota:
+  #   get:
+  #     summary: 
+  #     description: 
+  #     responses:
+  #       200:
+  #         description: OK
+    
 securityDefinitions:
   # Authorization:
   #   type: apiKey
@@ -30,3 +135,14 @@ securityDefinitions:
     type: apiKey
     in: query
     name: access_token
+definitions:
+  newThing:
+    type: object
+    required:
+      - board
+    properties:
+      board:
+        type: string
+      name:
+        type: string
+        
