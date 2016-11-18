@@ -8,24 +8,24 @@ info:
 
     ## 端点
     API请求的端点为
-    	
+        
         https://wio.seeed.io/v2
         https://wio.forkthings.com/v2 (test)
-    	
+        
     所有的返回都为json格式。
-    	
-    	
+        
+        
     ## Token
     每个请求都需要带上认证信息，有两种方式携带认证信息。
     
     - 在`Header`添加`Authorization`，例如：
-    	
-    		  Authorization: token 313be000160b425baf933d47e12b1e9e
-    	
+        
+              Authorization: token 313be000160b425baf933d47e12b1e9e
+        
     - 在请求参数中添加`access_token`，例如：
     
-    		https://wio.seeed.io/v2/user?access_token= 313be000160b425baf933d47e12b1e9e
-    		
+            https://wio.seeed.io/v2/user?access_token= 313be000160b425baf933d47e12b1e9e
+            
     ## 响应码
     API完全遵循HTTP 状态码协议规定，不同响应码：
     
@@ -44,10 +44,10 @@ info:
     ## 错误消息
     `status code：400`
     
-      	{
-      	  "error": "Invalid user",
-      	}
-    	
+          {
+            "error": "Invalid user",
+          }
+        
     ## 时间格式
     时间采用`ISO8601`格式。如`YYYY-MM-DDTHH:MM:SSZ`
     
@@ -78,7 +78,7 @@ paths:
         - access_token: []
       responses:
         204:
-          description: No content
+          description: No Content
   /v2/users:
     get:
       tags:
@@ -123,10 +123,10 @@ paths:
           in: path
           description: ID of user
           required: true
-          type: string        
+          type: string
       responses:
         200:
-          description: OK        
+          description: OK
   
   /v2/things:
     get:
@@ -157,7 +157,7 @@ paths:
           # description: Pet to add to the store
           required: true
           schema:
-            $ref: '#/definitions/newThing'        
+            $ref: '#/definitions/newThing'
       responses:
         201:
           description: Created
@@ -176,7 +176,7 @@ paths:
       security:
         - access_token: []
       summary: 获取节点设备信息
-      # description: 
+      # description:
       responses:
         200:
           description: OK
@@ -187,8 +187,8 @@ paths:
         - things
       security:
         - access_token: []
-      # summary: 
-      # description: 
+      # summary:
+      # description:
       parameters:
         - name: newThing
           in: body
@@ -205,15 +205,15 @@ paths:
         - things
       security:
         - access_token: []
-      # summary: 
-      # description: 
+      # summary:
+      # description:
       responses:
         204:
-          description: No content
+          description: No Content
   # /v2/things/{thing_id}/page:
   #   get:
-  #     summary: 
-  #     description: 
+  #     summary:
+  #     description:
   #     responses:
   #       200:
   #         description: OK
@@ -229,8 +229,8 @@ paths:
         - things
       security:
         - access_token: []
-      # summary: 
-      # description: 
+      # summary:
+      # description:
       responses:
         200:
           description: OK
@@ -241,8 +241,8 @@ paths:
         - firmwares
       security:
         - access_token: []
-      # summary: 
-      # description: 
+      # summary:
+      # description:
       responses:
         200:
           description: OK
@@ -254,8 +254,8 @@ paths:
         - firmwares
       security:
         - access_token: []
-      # summary: 
-      # description: 
+      # summary:
+      # description:
       responses:
         201:
           description: Created
@@ -272,9 +272,9 @@ paths:
       tags:
         - firmwares
       security:
-        - access_token: []    
-      # summary: 
-      # description: 
+        - access_token: []
+      # summary:
+      # description:
       responses:
         200:
           description: OK
@@ -285,8 +285,8 @@ paths:
         - firmwares
       security:
         - access_token: []
-    #   summary: 
-    #   description: 
+    #   summary:
+    #   description:
       parameters:
         - name: modify
           in: body
@@ -303,11 +303,11 @@ paths:
         - firmwares
       security:
         - access_token: []
-    #   summary: 
-    #   description: 
+    #   summary:
+    #   description:
       responses:
         204:
-          description: No content
+          description: No Content
   /v2/firmwares/{firmware_id}/ulbs:
     parameters:
       - name: firmware_id
@@ -320,8 +320,8 @@ paths:
         - firmwares
       security:
         - access_token: []
-      # summary: 
-      # description: 
+      # summary:
+      # description:
       responses:
         200:
           description: OK
@@ -336,7 +336,7 @@ paths:
         required: true
         type: string
       - name: path_name
-        description: | 
+        description: |
           ulb file relative path, such as `/foo/bar.cpp`
         in: path
         type: string
@@ -346,8 +346,8 @@ paths:
         - firmwares
       security:
         - access_token: []
-      # summary: 
-      # description: 
+      # summary:
+      # description:
       responses:
         200:
           description: OK
@@ -372,23 +372,23 @@ paths:
         - firmwares
       security:
         - access_token: []
-      # summary: 
-      # description: 
+      # summary:
+      # description:
       responses:
         200:
           description: OK
           schema:
-            $ref: "#/definitions/ulb" 
+            $ref: "#/definitions/ulb"
     delete:
       tags:
         - firmwares
       security:
         - access_token: []
-      # summary: 
-      # description: 
+      # summary:
+      # description:
       responses:
         204:
-          description: No content
+          description: No Content
   /v2/firmwares/{firmware_id}/bin:
     parameters:
       - name: firmware_id
@@ -432,8 +432,8 @@ paths:
     get:
       tags:
         - misellaneous
-      # summary: 
-      # description: 
+      # summary:
+      # description:
       responses:
         200:
           description: OK
@@ -498,8 +498,8 @@ paths:
     get:
       tags:
         - misellaneous
-      # summary: 
-      # description: 
+      # summary:
+      # description:
       responses:
         200:
           description: OK
