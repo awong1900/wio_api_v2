@@ -1,0 +1,46 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "0.0.1",
+        "title": "Wio API v2"
+    },
+    "schemes": [
+        "https"
+    ],
+    "host": "wio.forkthings.com",
+    "paths": {
+        "/v2/user": {
+            "get": {
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "access_token": {
+            "type": "apiKey",
+            "in": "query",
+            "name": "access_token"
+        }
+    }
+}
