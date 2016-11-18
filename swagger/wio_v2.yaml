@@ -9,12 +9,16 @@ host: wio.forkthings.com
 paths:
   /v2/user:
     get:
+      tags:
+        - users
       security:
         - access_token: []
       responses:
         200:
           description: OK
     delete:
+      tags:
+        - users
       security:
         - access_token: []
       responses:
@@ -22,6 +26,8 @@ paths:
           description: OK  
   /v2/users:
     get:
+      tags:
+        - users
       security:
         - access_token: []
       responses:
@@ -29,6 +35,8 @@ paths:
           description: OK
   /v2/users/{user_id}:
     get:
+      tags:
+        - users
       security:
         - access_token: []
       parameters:
@@ -42,6 +50,8 @@ paths:
           description: OK
   /v2/user/token:
     get:
+      tags:
+        - users
       security:
         - access_token: []
       responses:
@@ -49,6 +59,8 @@ paths:
           description: OK
   /v2/user/{user_id}/token:
     get:
+      tags:
+        - users
       security:
         - access_token: []
       parameters:
@@ -62,6 +74,8 @@ paths:
           description: OK        
   /v2/things:
     get:
+      tags:
+        - things
       security:
         - access_token: []
       summary: sd
@@ -71,6 +85,8 @@ paths:
           description: OK
     
     post:
+      tags:
+        - things
       security:
         - access_token: []
       # summary: sdf
@@ -125,7 +141,11 @@ paths:
   #     responses:
   #       200:
   #         description: OK
-    
+tags:
+  - name: users
+  - name: things
+  - name: firmwares
+  
 securityDefinitions:
   # Authorization:
   #   type: apiKey

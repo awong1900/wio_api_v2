@@ -11,6 +11,9 @@
     "paths": {
         "/v2/user": {
             "get": {
+                "tags": [
+                    "users"
+                ],
                 "security": [
                     {
                         "access_token": []
@@ -23,6 +26,9 @@
                 }
             },
             "delete": {
+                "tags": [
+                    "users"
+                ],
                 "security": [
                     {
                         "access_token": []
@@ -37,6 +43,9 @@
         },
         "/v2/users": {
             "get": {
+                "tags": [
+                    "users"
+                ],
                 "security": [
                     {
                         "access_token": []
@@ -51,6 +60,9 @@
         },
         "/v2/users/{user_id}": {
             "get": {
+                "tags": [
+                    "users"
+                ],
                 "security": [
                     {
                         "access_token": []
@@ -74,6 +86,9 @@
         },
         "/v2/user/token": {
             "get": {
+                "tags": [
+                    "users"
+                ],
                 "security": [
                     {
                         "access_token": []
@@ -88,6 +103,9 @@
         },
         "/v2/user/{user_id}/token": {
             "get": {
+                "tags": [
+                    "users"
+                ],
                 "security": [
                     {
                         "access_token": []
@@ -111,6 +129,9 @@
         },
         "/v2/things": {
             "get": {
+                "tags": [
+                    "things"
+                ],
                 "security": [
                     {
                         "access_token": []
@@ -125,6 +146,9 @@
                 }
             },
             "post": {
+                "tags": [
+                    "things"
+                ],
                 "security": [
                     {
                         "access_token": []
@@ -151,6 +175,17 @@
             }
         }
     },
+    "tags": [
+        {
+            "name": "users"
+        },
+        {
+            "name": "things"
+        },
+        {
+            "name": "firmwares"
+        }
+    ],
     "securityDefinitions": {
         "access_token": {
             "type": "apiKey",
