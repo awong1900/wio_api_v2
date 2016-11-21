@@ -685,7 +685,7 @@ definitions:
       user_id: 160979
       firmware_id: null,
       key: 6eb8cccd6a7b48a5ba842c3f22683cea
-      name: 
+      name: wio01
       board: WioLink v1.0
       online: false
       pp_id: null
