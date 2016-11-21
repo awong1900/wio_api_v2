@@ -252,6 +252,24 @@
                         "access_token": []
                     }
                 ],
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "请求第几页",
+                        "required": false
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "每一页的数量",
+                        "required": false
+                    }
+                ],
+                "summary": "列出当前用户的所有节点设备",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -278,13 +296,16 @@
                         "access_token": []
                     }
                 ],
+                "summary": "创建一个节点设备",
+                "description": "",
                 "produces": [
                     "application/json"
                 ],
                 "parameters": [
                     {
-                        "name": "thing",
+                        "name": "thingParas",
                         "in": "body",
+                        "description": "创建节点设备参数",
                         "required": true,
                         "schema": {
                             "$ref": "#/definitions/newThing"
@@ -313,7 +334,7 @@
                 {
                     "name": "thing_id",
                     "in": "path",
-                    "description": "ID of thing",
+                    "description": "节点设备ID",
                     "required": true,
                     "type": "string"
                 }
@@ -328,6 +349,7 @@
                     }
                 ],
                 "summary": "获取节点设备信息",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -356,6 +378,8 @@
                         }
                     }
                 ],
+                "summary": "更新节点设备信息",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -374,9 +398,52 @@
                         "access_token": []
                     }
                 ],
+                "summary": "删除节点设备",
+                "description": "",
                 "responses": {
                     "204": {
                         "description": "No Content"
+                    }
+                }
+            }
+        },
+        "/v2/things/{thing_id}/page": {
+            "parameters": [
+                {
+                    "name": "Authorization",
+                    "in": "header",
+                    "type": "string",
+                    "description": "认证信息，以`token`开头空格后加上token,如`token your_token`\n",
+                    "required": false
+                },
+                {
+                    "name": "thing_id",
+                    "in": "path",
+                    "description": "节点设备ID",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "things"
+                ],
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ],
+                "summary": "获取节点设备的API页面",
+                "description": "",
+                "produces": [
+                    "text/html"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK, 通过html页面展示节点可用的Web API操作。",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -393,7 +460,7 @@
                 {
                     "name": "thing_id",
                     "in": "path",
-                    "description": "ID of thing",
+                    "description": "节点设备ID",
                     "required": true,
                     "type": "string"
                 }
@@ -407,9 +474,74 @@
                         "access_token": []
                     }
                 ],
+                "summary": "获得当前的OTA信息",
+                "description": "显示OTA的状态和定时OTA的时间等。\n",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ota"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "things"
+                ],
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "newOta",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/newOta"
+                        }
+                    }
+                ],
+                "summary": "立即或定时升级节点设备固件",
+                "description": "- 当`ota_at`参数不在时，立即提交OTA操作\n- 当`ota_at`参数在，且大于当前时间时，提交定时OTA\n",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ota"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "things"
+                ],
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "newOta",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/updateOta"
+                        }
+                    }
+                ],
+                "summary": "修改OTA设置",
+                "description": "可以通过参数修改OTA时间，固件版本或者取消升级。\n",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ota"
+                        }
                     }
                 }
             }
@@ -433,6 +565,24 @@
                         "access_token": []
                     }
                 ],
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "请求第几页",
+                        "required": false
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "每一页的数量",
+                        "required": false
+                    }
+                ],
+                "summary": "",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -955,10 +1105,12 @@
                     "enum": [
                         "Wio Link v1.0",
                         "Wio Node v1.0"
-                    ]
+                    ],
+                    "description": "节点设备型号"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "节点设备名字"
                 }
             },
             "example": {
@@ -1017,6 +1169,82 @@
                 "page_url": "http://localhost:16080/v2/things/12a9d0922562456a9fdf0b55c20b29ea/page",
                 "created_at": "2016-11-21T03:27:04.000Z",
                 "updated_at": "2016-11-21T03:27:04.000Z"
+            }
+        },
+        "ota": {
+            "type": "object",
+            "properties": {
+                "thing_id": {
+                    "type": "string"
+                },
+                "firmware_id": {
+                    "type": "string"
+                },
+                "ota_at": {
+                    "type": "string",
+                    "format": "dateTime"
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "",
+                        "pending",
+                        "queue",
+                        "processing",
+                        "succeeded",
+                        "failed"
+                    ]
+                },
+                "status_text": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "dateTime"
+                }
+            },
+            "example": {
+                "thing_id": "049f867bad4f4f0db302df7798cd94e6",
+                "firmware_id": "ad144ec3505641e29555e7de25aeaa08",
+                "ota_at": "2016-12-20T00:00:00.000Z",
+                "status": "pending",
+                "status_text": "waiting to be scheduled",
+                "updated_at": "2016-11-21T10:11:28.000Z"
+            }
+        },
+        "newOta": {
+            "type": "object",
+            "properties": {
+                "firmware_id": {
+                    "type": "string"
+                },
+                "ota_at": {
+                    "type": "string",
+                    "format": "dateTime"
+                }
+            },
+            "required": [
+                "firmware_id"
+            ],
+            "example": {
+                "firmware_id": "ad144ec3505641e29555e7de25aeaa08",
+                "ota_at": "2016-12-20T00:00:00.000Z"
+            }
+        },
+        "updateOta": {
+            "type": "object",
+            "properties": {
+                "firmware_id": {
+                    "type": "string"
+                },
+                "ota_at": {
+                    "type": "string",
+                    "format": "dateTime"
+                }
+            },
+            "example": {
+                "firmware_id": "ad144ec3505641e29555e7de25aeaa08",
+                "ota_at": "2016-12-20T00:00:00.000Z"
             }
         },
         "firmware": {
