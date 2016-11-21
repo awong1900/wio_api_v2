@@ -619,9 +619,9 @@ definitions:
   userToken:
     type: object
     properties:
-      user_id:
-        type: string
       token:
+        type: string
+      user_id:
         type: string
       expire:
         type: string
@@ -634,7 +634,7 @@ definitions:
         format: dateTime
     example:
       user_id: mbrXAWhtKocpgb5mp4XVZb7hz0x2
-      token: 23sdfsx93dkfsd0sflksdf090sdf
+      token: Mev326aO4gODGY0exYt4bmDmX7u2
       expire: 2016-11-22T02:25:01Z
       created_at: 2016-11-21T02:25:01Z
       updated_at: 2016-11-21T02:25:01Z
@@ -680,6 +680,18 @@ definitions:
       updated_at:
         type: string
         format: dateTime
+    example:
+      thing_id: 12a9d0922562456a9fdf0b55c20b29ea
+      user_id: 160979
+      firmware_id: null,
+      key: 6eb8cccd6a7b48a5ba842c3f22683cea
+      name: 
+      board: WioLink v1.0
+      online: false
+      pp_id: null
+      page_url: http://localhost:16080/v2/things/12a9d0922562456a9fdf0b55c20b29ea/page
+      created_at: 2016-11-21T03:27:04Z
+      updated_at: 2016-11-21T03:27:04Z
   firmware:
     type: object
     properties:
@@ -709,6 +721,38 @@ definitions:
       updated_at:
         type: string
         format: dateTime
+    example:
+      firmware_id: a6c91046291049e9a9357dd535c91598
+      user_id: 160979
+      name: Hello-World
+      desc: First firmware
+      firmware_type: flexible
+      fixed_url: null
+      bin_url: null
+      size: null
+      sha: null
+      config:
+        board_name: Wio Link v1.0
+        connections: []
+      created_at: 2016-11-21T03:41:52Z
+      updated_at: 2016-11-21T03:41:52Z
+  newFirmware:
+    type: object
+    properties:
+      name:
+        type: string
+      desc:
+        type: string
+      config:
+        $ref: "#/definitions/config"
+    example:
+      name: Hello-World
+      desc: First firmware
+      config:
+      	board_name: Wio Link v1.0
+      	connections: [
+      	  {sku: 101020019-ffff, port: D0}
+      	  ]
   config:
     type: object
     properties:
@@ -723,9 +767,9 @@ definitions:
       - connections
     example:
       board_name: Wio Link v1.0
-      connections:
-        items:
-          $ref: "#/definitions/connection"
+      connections: [
+        {sku: 101020019-ffff, port: D0}
+        ]
   connection:
     type: object
     properties:
