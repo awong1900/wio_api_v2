@@ -767,6 +767,13 @@
                     "type": "string",
                     "format": "dateTime"
                 }
+            },
+            "example": {
+                "user_id": "mbrXAWhtKocpgb5mp4XVZb7hz0x2",
+                "token": "23sdfsx93dkfsd0sflksdf090sdf",
+                "expire": "2016-11-22T02:25:01.000Z",
+                "created_at": "2016-11-21T02:25:01.000Z",
+                "updated_at": "2016-11-21T02:25:01.000Z"
             }
         },
         "newThing": {
@@ -785,6 +792,10 @@
                 "name": {
                     "type": "string"
                 }
+            },
+            "example": {
+                "board": "Wio Link v1.0",
+                "name": "wio01"
             }
         },
         "thing": {
@@ -889,7 +900,11 @@
             ],
             "example": {
                 "board_name": "Wio Link v1.0",
-                "connections": []
+                "connections": {
+                    "items": {
+                        "$ref": "#/definitions/connection"
+                    }
+                }
             }
         },
         "connection": {

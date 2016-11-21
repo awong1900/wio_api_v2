@@ -632,6 +632,12 @@ definitions:
       updated_at:
         type: string
         format: dateTime
+    example:
+      user_id: mbrXAWhtKocpgb5mp4XVZb7hz0x2
+      token: 23sdfsx93dkfsd0sflksdf090sdf
+      expire: 2016-11-22T02:25:01Z
+      created_at: 2016-11-21T02:25:01Z
+      updated_at: 2016-11-21T02:25:01Z
   newThing:
     type: object
     required:
@@ -644,6 +650,9 @@ definitions:
           - Wio Node v1.0
       name:
         type: string
+    example:
+      board: Wio Link v1.0
+      name: wio01
   thing:
     type: object
     properties:
@@ -714,7 +723,9 @@ definitions:
       - connections
     example:
       board_name: Wio Link v1.0
-      connections: []
+      connections:
+        items:
+          $ref: "#/definitions/connection"
   connection:
     type: object
     properties:
