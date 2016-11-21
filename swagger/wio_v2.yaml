@@ -125,22 +125,40 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/user'
-  /v2/users/{user_id}:
-    get:
-      tags:
-        - users
-      security:
-        - access_token: []
-      parameters:
-        - name: user_id
-          in: path
-          description: ID of user
-          required: true
-          type: string
-      responses:
-        200:
-          description: OK
+  # /v2/users/{user_id}:  # Not use
+  #   parameters:
+  #     - name: Authorization
+  #       in: header
+  #       type: string
+  #       description: |
+  #         认证信息，以`token`开头空格后加上token,如`token your_token`
+  #       required: false
+  #   get:
+  #     tags:
+  #       - users
+  #     security:
+  #       - access_token: []
+  #     parameters:
+  #       - name: user_id
+  #         in: path
+  #         description: 指定用户ID
+  #         required: true
+  #         type: string
+  #     summary: 获取指定用户信息
+  #     description: 需要此用户权限或者管理员权限
+  #     responses:
+  #       200:
+  #         description: OK
+  #         schema:
+  #           $ref: '#/definitions/user'
   /v2/user/token:
+    parameters:
+      - name: Authorization
+        in: header
+        type: string
+        description: |
+          认证信息，以`token`开头空格后加上token,如`token your_token`
+        required: false
     get:
       tags:
         - users
@@ -150,6 +168,13 @@ paths:
         200:
           description: OK
   /v2/user/{user_id}/token:
+    parameters:
+      - name: Authorization
+        in: header
+        type: string
+        description: |
+          认证信息，以`token`开头空格后加上token,如`token your_token`
+        required: false
     get:
       tags:
         - users
@@ -166,6 +191,13 @@ paths:
           description: OK
 
   /v2/things:
+    parameters:
+      - name: Authorization
+        in: header
+        type: string
+        description: |
+          认证信息，以`token`开头空格后加上token,如`token your_token`
+        required: false
     get:
       tags:
         - things
@@ -206,6 +238,12 @@ paths:
             $ref: '#/definitions/thing'
   /v2/things/{thing_id}:
     parameters:
+      - name: Authorization
+        in: header
+        type: string
+        description: |
+          认证信息，以`token`开头空格后加上token,如`token your_token`
+        required: false
       - name: thing_id
         in: path
         description: ID of thing
@@ -260,6 +298,12 @@ paths:
   #         description: OK
   /v2/things/{thing_id}/ota:
     parameters:
+      - name: Authorization
+        in: header
+        type: string
+        description: |
+          认证信息，以`token`开头空格后加上token,如`token your_token`
+        required: false
       - name: thing_id
         in: path
         description: ID of thing
@@ -275,8 +319,14 @@ paths:
       responses:
         200:
           description: OK
-  
   /v2/firmwares:
+    parameters:
+      - name: Authorization
+        in: header
+        type: string
+        description: |
+          认证信息，以`token`开头空格后加上token,如`token your_token`
+        required: false
     get:
       tags:
         - firmwares
@@ -308,6 +358,12 @@ paths:
             $ref: "#/definitions/firmware"
   /v2/firmwares/{firmware_id}:
     parameters:
+      - name: Authorization
+        in: header
+        type: string
+        description: |
+          认证信息，以`token`开头空格后加上token,如`token your_token`
+        required: false
       - name: firmware_id
         in: path
         description: ID of firmware
@@ -355,6 +411,12 @@ paths:
           description: No Content
   /v2/firmwares/{firmware_id}/ulbs:
     parameters:
+      - name: Authorization
+        in: header
+        type: string
+        description: |
+          认证信息，以`token`开头空格后加上token,如`token your_token`
+        required: false
       - name: firmware_id
         in: path
         description: ID of firmware
@@ -375,6 +437,12 @@ paths:
               $ref: "#/definitions/ulb"
   /v2/firmwares/{firmware_id}/ulbs/{path_name}:
     parameters:
+      - name: Authorization
+        in: header
+        type: string
+        description: |
+          认证信息，以`token`开头空格后加上token,如`token your_token`
+        required: false
       - name: firmware_id
         in: path
         description: ID of firmware
@@ -436,6 +504,12 @@ paths:
           description: No Content
   /v2/firmwares/{firmware_id}/bin:
     parameters:
+      - name: Authorization
+        in: header
+        type: string
+        description: |
+          认证信息，以`token`开头空格后加上token,如`token your_token`
+        required: false
       - name: firmware_id
         in: path
         description: ID of firmware
@@ -472,7 +546,7 @@ paths:
     #     description: ID of firmware
     #     required: true
     #     type: string
-    
+
   /v2/drivers:
     get:
       tags:
