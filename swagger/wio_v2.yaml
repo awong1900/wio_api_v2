@@ -683,7 +683,7 @@ definitions:
     example:
       thing_id: 12a9d0922562456a9fdf0b55c20b29ea
       user_id: 160979
-      firmware_id: 
+      firmware_id: ""
       key: 6eb8cccd6a7b48a5ba842c3f22683cea
       name: wio01
       board: WioLink v1.0
