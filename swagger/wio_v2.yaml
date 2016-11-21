@@ -76,9 +76,7 @@ paths:
         200:
           description: OK
           schema:
-            users:
-              items:
-                $ref: '#/definitions/user'
+            $ref: '#/definitions/user'
     delete:
       tags:
         - users
@@ -121,8 +119,12 @@ paths:
         200:
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/user'
+            type: object
+            properties:
+              users:
+                type: array
+                items:
+                  $ref: '#/definitions/user'
   /v2/users/{user_id}:
     get:
       tags:
@@ -175,8 +177,12 @@ paths:
         200:
           description: OK
           schema:
-            items:
-              $ref: '#/definitions/thing'
+            type: object
+            properties:
+              things:
+                type: array
+                items:
+                  $ref: '#/definitions/thing'
     post:
       tags:
         - things
@@ -282,8 +288,12 @@ paths:
         200:
           description: OK
           schema:
-            items:
-              $ref: "#/definitions/firmware"
+            type: object
+            properties:
+              firmwares:
+                type: array
+                items:
+                  $ref: '#/definitions/firmware'
     post:
       tags:
         - firmwares
