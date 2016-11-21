@@ -840,12 +840,12 @@
             "example": {
                 "thing_id": "12a9d0922562456a9fdf0b55c20b29ea",
                 "user_id": 160979,
-                "firmware_id": "null,",
+                "firmware_id": null,
                 "key": "6eb8cccd6a7b48a5ba842c3f22683cea",
                 "name": "wio01",
                 "board": "WioLink v1.0",
                 "online": false,
-                "pp_id": null,
+                "pp_id": "",
                 "page_url": "http://localhost:16080/v2/things/12a9d0922562456a9fdf0b55c20b29ea/page",
                 "created_at": "2016-11-21T03:27:04.000Z",
                 "updated_at": "2016-11-21T03:27:04.000Z"
@@ -899,10 +899,10 @@
                 "name": "Hello-World",
                 "desc": "First firmware",
                 "firmware_type": "flexible",
-                "fixed_url": null,
-                "bin_url": null,
-                "size": null,
-                "sha": null,
+                "fixed_url": "",
+                "bin_url": "",
+                "size": "",
+                "sha": "",
                 "config": {
                     "board_name": "Wio Link v1.0",
                     "connections": []
@@ -927,14 +927,15 @@
             "example": {
                 "name": "Hello-World",
                 "desc": "First firmware",
-                "config": null,
-                "board_name": "Wio Link v1.0",
-                "connections": [
-                    {
-                        "sku": "101020019-ffff",
-                        "port": "D0"
-                    }
-                ]
+                "config": {
+                    "board_name": "Wio Link v1.0",
+                    "connections": [
+                        {
+                            "sku": "101020019-ffff",
+                            "port": "D0"
+                        }
+                    ]
+                }
             }
         },
         "config": {
@@ -1058,13 +1059,21 @@
                     "type": "string",
                     "format": "dateTime"
                 }
+            },
+            "example": {
+                "firmware_id": "a6c91046291049e9a9357dd535c91598",
+                "path": "gen.cpp",
+                "name": "gen.cpp",
+                "content": "\n#include \"suli2.h\"\n#include \"rpc_server.h\"\n#include \"rpc_stream.h\"\n#include \"Main.h\"\n\n\n\nvoid rpc_server_register_resources()\n{\n\n}\n\n",
+                "encoding": "plain",
+                "size": 132,
+                "sha": "05e7ba1a58a00342e916da97567c6a610ae5ade7",
+                "created_at": "2016-11-21T03:41:52.000Z",
+                "updated_at": "2016-11-21T03:41:52.000Z"
             }
         },
         "binState": {
             "type": "object",
-            "required": [
-                "status"
-            ],
             "properties": {
                 "status": {
                     "type": "string",
@@ -1077,6 +1086,12 @@
                 "status_text": {
                     "type": "string"
                 }
+            },
+            "require": [
+                "status"
+            ],
+            "example": {
+                "status": "building"
             }
         },
         "bin": {
