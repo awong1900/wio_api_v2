@@ -125,32 +125,41 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/user'
-  # /v2/users/{user_id}:  # Not use
-  #   parameters:
-  #     - name: Authorization
-  #       in: header
-  #       type: string
-  #       description: |
-  #         认证信息，以`token`开头空格后加上token,如`token your_token`
-  #       required: false
-  #   get:
-  #     tags:
-  #       - users
-  #     security:
-  #       - access_token: []
-  #     parameters:
-  #       - name: user_id
-  #         in: path
-  #         description: 指定用户ID
-  #         required: true
-  #         type: string
-  #     summary: 获取指定用户信息
-  #     description: 需要此用户权限或者管理员权限
-  #     responses:
-  #       200:
-  #         description: OK
-  #         schema:
-  #           $ref: '#/definitions/user'
+  /v2/users/{user_id}:  # Not use
+    parameters:
+      - name: Authorization
+        in: header
+        type: string
+        description: |
+          认证信息，以`token`开头空格后加上token,如`token your_token`
+        required: false
+      - name: user_id
+        in: path
+        description: 指定用户ID
+        required: true
+        type: string
+    # get:
+    #   tags:
+    #     - users
+    #   security:
+    #     - access_token: []
+    #   summary: 获取指定用户信息
+    #   description: 需要此用户权限或者管理员权限
+    #   responses:
+    #     200:
+    #       description: OK
+    #       schema:
+    #         $ref: '#/definitions/user'
+    delete:
+      tags:
+        - users
+      security:
+        - access_token: []
+      summary: 删除指定用户
+      description: 需要此用户权限或者管理员权限
+      responses:
+        204:
+          description: No Content
   /v2/user/token:
     parameters:
       - name: Authorization
@@ -164,9 +173,13 @@ paths:
         - users
       security:
         - access_token: []
+      summary: 获取当前用户token信息
+      description: ""
       responses:
         200:
           description: OK
+          schema:
+            $ref: '#/definitions/userToken'
   /v2/user/{user_id}/token:
     parameters:
       - name: Authorization
@@ -183,13 +196,16 @@ paths:
       parameters:
         - name: user_id
           in: path
-          description: ID of user
+          description: 用户ID
           required: true
           type: string
+      summary: 获取指定用户token信息
+      description: 需要此用户权限或者管理员权限
       responses:
         200:
           description: OK
-
+          schema:
+            $ref: '#/definitions/userToken'
   /v2/things:
     parameters:
       - name: Authorization

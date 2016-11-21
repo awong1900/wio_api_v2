@@ -3,7 +3,7 @@
     "info": {
         "version": "v2",
         "title": "Wio API v2",
-        "description": "Wio IOT 平台是一款物联网应用平台，真正的WOT产品。Restful API帮助用户完成产品定义和部署。\n\n## 端点\nAPI请求的端点为\n    \n    https://wio.seeed.io/v2\n    https://wio.forkthings.com/v2 (test)\n    \n所有的返回都为json格式。\n    \n    \n## Token\n每个请求都需要带上认证信息，有两种方式携带认证信息。\n\n- 在`Header`添加`Authorization`，例如：\n    \n          Authorization: token 313be000160b425baf933d47e12b1e9e\n    \n- 在请求参数中添加`access_token`，例如：\n\n        https://wio.seeed.io/v2/user?access_token= 313be000160b425baf933d47e12b1e9e\n        \n## 响应码\nAPI完全遵循HTTP 状态码协议规定，不同响应码：\n\n状态码 | 描述\n---|---\n200 | OK，正常响应\n201 | Created，资源创建成功\n202 | Accepted，请求已接受，后台服务正在处理\n302 | Retry，重定向\n400 | Error，出现错误，会带上错误消息\n403 | Forbidden，没有访问资源的权限\n404 | Not Found，没有发现资源\n405 | Method Not Allowed\n500 | Internal Server Error，系统错误，服务器停止\n\n## 错误消息\n`status code：400`\n\n      {\n        \"error\": \"Invalid user\",\n      }\n    \n## 时间格式\n时间采用`ISO8601`格式。如`YYYY-MM-DDTHH:MM:SSZ`\n"
+        "description": "Wio IOT 平台是一款物联网应用平台，真正的WOT产品。Restful API帮助用户完成产品定义和部署。\n\n## 端点\nAPI请求的端点为\n\n    https://wio.seeed.io/v2\n    https://wio.forkthings.com/v2 (test)\n\n## Token\n每个请求都需要带上认证信息，有两种方式携带认证信息。\n\n- 在`Header`添加`Authorization`，例如：\n\n    Authorization: token 313be000160b425baf933d47e12b1e9e\n\n- 在请求参数中添加`access_token`，例如：\n\n    https://wio.seeed.io/v2/user?access_token= 313be000160b425baf933d47e12b1e9e\n\n## 响应码\nAPI完全遵循HTTP 状态码协议规定，不同响应码：\n\n状态码 | 描述\n---|---\n200 | OK，正常响应\n201 | Created，资源创建成功\n202 | Accepted，请求已接受，后台服务正在处理\n302 | Retry，重定向\n400 | Error，出现错误，会带上错误消息\n403 | Forbidden，没有访问资源的权限\n404 | Not Found，没有发现资源\n405 | Method Not Allowed\n500 | Internal Server Error，系统错误，服务器停止\n\n## 错误消息\n`status code：400`\n\n    {\n      \"error\": \"Invalid user\",\n    }\n\n## 时间格式\n时间采用`ISO8601`格式。如`YYYY-MM-DDTHH:MM:SSZ`\n"
     },
     "schemes": [
         "https"
@@ -25,6 +25,15 @@
     ],
     "paths": {
         "/v2/user": {
+            "parameters": [
+                {
+                    "name": "Authorization",
+                    "in": "header",
+                    "type": "string",
+                    "description": "认证信息，以`token`开头空格后加上token,如`token your_token`\n",
+                    "required": false
+                }
+            ],
             "get": {
                 "tags": [
                     "users"
@@ -34,6 +43,8 @@
                         "access_token": []
                     }
                 ],
+                "summary": "获取当前用户ID",
+                "description": "根据提交的token找到当前用户，如果第一次登陆，则先传递token到SSO系统，认证成功后，存储用户到当前系统。\n",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -52,6 +63,8 @@
                         "access_token": []
                     }
                 ],
+                "summary": "删除当前用户",
+                "description": "同时会删除用户所有的节点设备和项目数据，请小心使用。",
                 "responses": {
                     "204": {
                         "description": "No Content"
@@ -60,6 +73,15 @@
             }
         },
         "/v2/users": {
+            "parameters": [
+                {
+                    "name": "Authorization",
+                    "in": "header",
+                    "type": "string",
+                    "description": "认证信息，以`token`开头空格后加上token,如`token your_token`\n",
+                    "required": false
+                }
+            ],
             "get": {
                 "tags": [
                     "users"
@@ -69,15 +91,60 @@
                         "access_token": []
                     }
                 ],
+                "summary": "获取所有用户ID",
+                "description": "以用户创建的时间顺序列出所有用户ID。\n> 只有认证用户为系统管理员时，才会返回所有用户信息。如何[添加管理员]()\n",
+                "parameters": [
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "请求第几页",
+                        "required": false
+                    },
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "type": "integer",
+                        "description": "每一页的数量",
+                        "required": false
+                    }
+                ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "users": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/user"
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
         },
         "/v2/users/{user_id}": {
-            "get": {
+            "parameters": [
+                {
+                    "name": "Authorization",
+                    "in": "header",
+                    "type": "string",
+                    "description": "认证信息，以`token`开头空格后加上token,如`token your_token`\n",
+                    "required": false
+                },
+                {
+                    "name": "user_id",
+                    "in": "path",
+                    "description": "指定用户ID",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "delete": {
                 "tags": [
                     "users"
                 ],
@@ -86,23 +153,25 @@
                         "access_token": []
                     }
                 ],
-                "parameters": [
-                    {
-                        "name": "user_id",
-                        "in": "path",
-                        "description": "ID of user",
-                        "required": true,
-                        "type": "string"
-                    }
-                ],
+                "summary": "删除指定用户",
+                "description": "需要此用户权限或者管理员权限",
                 "responses": {
-                    "200": {
-                        "description": "OK"
+                    "204": {
+                        "description": "No Content"
                     }
                 }
             }
         },
         "/v2/user/token": {
+            "parameters": [
+                {
+                    "name": "Authorization",
+                    "in": "header",
+                    "type": "string",
+                    "description": "认证信息，以`token`开头空格后加上token,如`token your_token`\n",
+                    "required": false
+                }
+            ],
             "get": {
                 "tags": [
                     "users"
@@ -112,14 +181,28 @@
                         "access_token": []
                     }
                 ],
+                "summary": "获取当前用户token信息",
+                "description": "",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/userToken"
+                        }
                     }
                 }
             }
         },
         "/v2/user/{user_id}/token": {
+            "parameters": [
+                {
+                    "name": "Authorization",
+                    "in": "header",
+                    "type": "string",
+                    "description": "认证信息，以`token`开头空格后加上token,如`token your_token`\n",
+                    "required": false
+                }
+            ],
             "get": {
                 "tags": [
                     "users"
@@ -133,19 +216,33 @@
                     {
                         "name": "user_id",
                         "in": "path",
-                        "description": "ID of user",
+                        "description": "用户ID",
                         "required": true,
                         "type": "string"
                     }
                 ],
+                "summary": "获取指定用户token信息",
+                "description": "需要此用户权限或者管理员权限",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/userToken"
+                        }
                     }
                 }
             }
         },
         "/v2/things": {
+            "parameters": [
+                {
+                    "name": "Authorization",
+                    "in": "header",
+                    "type": "string",
+                    "description": "认证信息，以`token`开头空格后加上token,如`token your_token`\n",
+                    "required": false
+                }
+            ],
             "get": {
                 "tags": [
                     "things"
@@ -159,8 +256,14 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "items": {
-                                "$ref": "#/definitions/thing"
+                            "type": "object",
+                            "properties": {
+                                "things": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/thing"
+                                    }
+                                }
                             }
                         }
                     }
@@ -200,6 +303,13 @@
         },
         "/v2/things/{thing_id}": {
             "parameters": [
+                {
+                    "name": "Authorization",
+                    "in": "header",
+                    "type": "string",
+                    "description": "认证信息，以`token`开头空格后加上token,如`token your_token`\n",
+                    "required": false
+                },
                 {
                     "name": "thing_id",
                     "in": "path",
@@ -274,6 +384,13 @@
         "/v2/things/{thing_id}/ota": {
             "parameters": [
                 {
+                    "name": "Authorization",
+                    "in": "header",
+                    "type": "string",
+                    "description": "认证信息，以`token`开头空格后加上token,如`token your_token`\n",
+                    "required": false
+                },
+                {
                     "name": "thing_id",
                     "in": "path",
                     "description": "ID of thing",
@@ -298,6 +415,15 @@
             }
         },
         "/v2/firmwares": {
+            "parameters": [
+                {
+                    "name": "Authorization",
+                    "in": "header",
+                    "type": "string",
+                    "description": "认证信息，以`token`开头空格后加上token,如`token your_token`\n",
+                    "required": false
+                }
+            ],
             "get": {
                 "tags": [
                     "firmwares"
@@ -311,8 +437,14 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "items": {
-                                "$ref": "#/definitions/firmware"
+                            "type": "object",
+                            "properties": {
+                                "firmwares": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/firmware"
+                                    }
+                                }
                             }
                         }
                     }
@@ -339,6 +471,13 @@
         },
         "/v2/firmwares/{firmware_id}": {
             "parameters": [
+                {
+                    "name": "Authorization",
+                    "in": "header",
+                    "type": "string",
+                    "description": "认证信息，以`token`开头空格后加上token,如`token your_token`\n",
+                    "required": false
+                },
                 {
                     "name": "firmware_id",
                     "in": "path",
@@ -412,6 +551,13 @@
         "/v2/firmwares/{firmware_id}/ulbs": {
             "parameters": [
                 {
+                    "name": "Authorization",
+                    "in": "header",
+                    "type": "string",
+                    "description": "认证信息，以`token`开头空格后加上token,如`token your_token`\n",
+                    "required": false
+                },
+                {
                     "name": "firmware_id",
                     "in": "path",
                     "description": "ID of firmware",
@@ -442,6 +588,13 @@
         },
         "/v2/firmwares/{firmware_id}/ulbs/{path_name}": {
             "parameters": [
+                {
+                    "name": "Authorization",
+                    "in": "header",
+                    "type": "string",
+                    "description": "认证信息，以`token`开头空格后加上token,如`token your_token`\n",
+                    "required": false
+                },
                 {
                     "name": "firmware_id",
                     "in": "path",
@@ -514,6 +667,13 @@
         },
         "/v2/firmwares/{firmware_id}/bin": {
             "parameters": [
+                {
+                    "name": "Authorization",
+                    "in": "header",
+                    "type": "string",
+                    "description": "认证信息，以`token`开头空格后加上token,如`token your_token`\n",
+                    "required": false
+                },
                 {
                     "name": "firmware_id",
                     "in": "path",
@@ -730,6 +890,14 @@
         }
     },
     "definitions": {
+        "errorMessage": {
+            "type": "object",
+            "properties": {
+                "error": {
+                    "type": "string"
+                }
+            }
+        },
         "user": {
             "type": "object",
             "properties": {
@@ -1087,7 +1255,7 @@
                     "type": "string"
                 }
             },
-            "require": [
+            "required": [
                 "status"
             ],
             "example": {
