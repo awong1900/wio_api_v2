@@ -298,7 +298,7 @@
                 ],
                 "summary": "创建一个节点设备",
                 "description": "",
-                "produces": [
+                "consumes": [
                     "application/json"
                 ],
                 "parameters": [
@@ -581,7 +581,7 @@
                         "required": false
                     }
                 ],
-                "summary": "",
+                "summary": "获取当前用户的所有固件项目",
                 "description": "",
                 "responses": {
                     "200": {
@@ -609,6 +609,22 @@
                         "access_token": []
                     }
                 ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "firmwareParas",
+                        "in": "body",
+                        "description": "创建固件项目参数",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/newFirmware"
+                        }
+                    }
+                ],
+                "summary": "创建一个固件项目",
+                "description": "",
                 "responses": {
                     "201": {
                         "description": "Created",
@@ -631,7 +647,7 @@
                 {
                     "name": "firmware_id",
                     "in": "path",
-                    "description": "ID of firmware",
+                    "description": "固件项目ID",
                     "required": true,
                     "type": "string"
                 }
@@ -645,6 +661,8 @@
                         "access_token": []
                     }
                 ],
+                "summary": "获取指定固件项目信息",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -663,16 +681,21 @@
                         "access_token": []
                     }
                 ],
+                "consumes": [
+                    "application/json"
+                ],
                 "parameters": [
                     {
-                        "name": "modify",
+                        "name": "firmwareParas",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/newThing"
+                            "$ref": "#/definitions/newFirmware"
                         }
                     }
                 ],
+                "summary": "更新指定项目信息",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -691,6 +714,8 @@
                         "access_token": []
                     }
                 ],
+                "summary": "删除指定固件项目",
+                "description": "",
                 "responses": {
                     "204": {
                         "description": "No Content"
@@ -710,7 +735,7 @@
                 {
                     "name": "firmware_id",
                     "in": "path",
-                    "description": "ID of firmware",
+                    "description": "固件项目ID",
                     "required": true,
                     "type": "string"
                 }
@@ -724,12 +749,22 @@
                         "access_token": []
                     }
                 ],
+                "summary": "获取当前用户的所有用户程序文件(ULB)",
+                "description": "",
+                "produces": [
+                    "application/json"
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "items": {
-                                "$ref": "#/definitions/ulb"
+                            "properties": {
+                                "ulbs": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/ulb"
+                                    }
+                                }
                             }
                         }
                     }
@@ -748,13 +783,13 @@
                 {
                     "name": "firmware_id",
                     "in": "path",
-                    "description": "ID of firmware",
+                    "description": "固件项目ID",
                     "required": true,
                     "type": "string"
                 },
                 {
                     "name": "path_name",
-                    "description": "ulb file relative path, such as `/foo/bar.cpp`\n",
+                    "description": "ulb文件相对路径，如`/foo/bar.cpp`\n",
                     "in": "path",
                     "type": "string",
                     "required": true
@@ -769,14 +804,26 @@
                         "access_token": []
                     }
                 ],
+                "parameters": [
+                    {
+                        "name": "format",
+                        "description": "定义返回的数据格式，`raw`|`base64`，分别为直接返回text文本或者编码成base64格式。\n",
+                        "in": "query",
+                        "type": "string",
+                        "required": false
+                    }
+                ],
+                "summary": "获取指定的ULB文件",
+                "description": "",
+                "produces": [
+                    "text/plain",
+                    "application/json"
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
                             "type": "string"
-                        },
-                        "examples": {
-                            "text": "#include \"wio.h\"\n#include \"suli2.h\"\n#include \"Main.h\"\n\nvoid setup()\n{\n}\n\nvoid loop()\n{\n\n}\n"
                         }
                     }
                 }
@@ -790,9 +837,28 @@
                         "access_token": []
                     }
                 ],
+                "consumes": [
+                    "text/plain"
+                ],
+                "parameters": [
+                    {
+                        "name": "text",
+                        "in": "body",
+                        "required": true,
+                        "description": "代码文件text格式",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "summary": "上传ULB文件",
+                "description": "",
+                "produces": [
+                    "application/json"
+                ],
                 "responses": {
-                    "200": {
-                        "description": "OK",
+                    "201": {
+                        "description": "Created",
                         "schema": {
                             "$ref": "#/definitions/ulb"
                         }
@@ -808,6 +874,8 @@
                         "access_token": []
                     }
                 ],
+                "summary": "删除指定的ULB文件",
+                "description": "",
                 "responses": {
                     "204": {
                         "description": "No Content"
@@ -827,7 +895,7 @@
                 {
                     "name": "firmware_id",
                     "in": "path",
-                    "description": "ID of firmware",
+                    "description": "固件项目ID",
                     "required": true,
                     "type": "string"
                 }
@@ -842,10 +910,10 @@
                     }
                 ],
                 "summary": "编译固件",
-                "description": "系统会现查找是否存在已经编译好的固件，如果没有，则开始一个编译任务。因此会先返回`202 Accepted`, 当完成后会返回`201 Created`。",
+                "description": "系统会现查找是否存在已经编译好的固件，如果没有，则开始一个编译任务。因此会先返回`202 Accepted`, 当完成后会返回`201 Created`。\n> 重复请求可以查询编译状态\n",
                 "responses": {
-                    "201": {
-                        "description": "Created",
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/bin"
                         }
@@ -859,11 +927,153 @@
                 }
             }
         },
+        "/v2/firmwares/{firmware_id}/import": {
+            "parameters": [
+                {
+                    "name": "Authorization",
+                    "in": "header",
+                    "type": "string",
+                    "description": "认证信息，以`token`开头空格后加上token,如`token your_token`\n",
+                    "required": false
+                },
+                {
+                    "name": "firmware_id",
+                    "in": "path",
+                    "description": "固件项目ID",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "put": {
+                "tags": [
+                    "firmwares"
+                ],
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "description": "支持三种github链接\n- 主干`https://github.com/awong1900/Wio_Sample_Project`\n- 分支`https://github.com/awong1900/Wio_Sample_Project/tree/dev`\n- 标签`https://github.com/awong1900/Wio_Sample_Project/tree/v0.2.0`\n",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "github_url": {
+                                    "type": "string",
+                                    "description": "需要导入的WIO项目的github链接"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "summary": "导入WIO固件项目",
+                "description": "由于导入过程需要一些时间，API会先响应`202`。直到完成导入，响应`201`.\n> 可以通过GET方法获得响应状态\n",
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "$ref": "#/definitions/firmwareImport"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "firmwares"
+                ],
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ],
+                "summary": "获得固件项目导入状态",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/firmwareImport"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "firmwares"
+                ],
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ],
+                "summary": "同步GitHub最新的固件项目文件",
+                "description": "",
+                "responses": {
+                    "202": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/firmwareImport"
+                        }
+                    }
+                }
+            }
+        },
+        "/v2/firmwares/{firmware_id}/export": {
+            "parameters": [
+                {
+                    "name": "Authorization",
+                    "in": "header",
+                    "type": "string",
+                    "description": "认证信息，以`token`开头空格后加上token,如`token your_token`\n",
+                    "required": false
+                },
+                {
+                    "name": "firmware_id",
+                    "in": "path",
+                    "description": "固件项目ID",
+                    "required": true,
+                    "type": "string"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "firmwares"
+                ],
+                "security": [
+                    {
+                        "access_token": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "定义输出的格式，`zipball`(default)|`tarball`",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/v2/drivers": {
             "get": {
                 "tags": [
                     "misellaneous"
                 ],
+                "summary": "输出WIO支持的驱动列表",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -933,6 +1143,8 @@
                 "tags": [
                     "misellaneous"
                 ],
+                "summary": "输出WIO支持的设备型号列表",
+                "description": "",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1040,14 +1252,6 @@
         }
     },
     "definitions": {
-        "errorMessage": {
-            "type": "object",
-            "properties": {
-                "error": {
-                    "type": "string"
-                }
-            }
-        },
         "user": {
             "type": "object",
             "properties": {
@@ -1321,7 +1525,7 @@
                 }
             },
             "example": {
-                "name": "Hello-World",
+                "name": "myWioFirmware",
                 "desc": "First firmware",
                 "config": {
                     "board_name": "Wio Link v1.0",
@@ -1378,45 +1582,6 @@
             "example": {
                 "sku": "101020019-ffff",
                 "port": "D0"
-            }
-        },
-        "newConfig": {
-            "type": "object",
-            "properties": {
-                "board_name": {
-                    "type": "string",
-                    "enum": [
-                        "Wio Link v1.0",
-                        "Wio Node v1.0"
-                    ]
-                },
-                "connections": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/newConnection"
-                    }
-                }
-            }
-        },
-        "newConnection": {
-            "type": "object",
-            "properties": {
-                "sku": {
-                    "type": "string"
-                },
-                "port": {
-                    "type": "string",
-                    "enum": [
-                        "D0",
-                        "D1",
-                        "D2",
-                        "A0",
-                        "A1",
-                        "UART0",
-                        "I2C0",
-                        "I2C1"
-                    ]
-                }
             }
         },
         "ulb": {
@@ -1496,6 +1661,43 @@
                 "status": {
                     "type": "string"
                 }
+            }
+        },
+        "firmwareImport": {
+            "type": "object",
+            "properties": {
+                "firmware_id": {
+                    "type": "string"
+                },
+                "github_url": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "pending",
+                        "importing"
+                    ]
+                },
+                "status_text": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string",
+                    "format": "dateTime"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "dateTime"
+                }
+            },
+            "example": {
+                "firmware_id": "ad144ec3505641e29555e7de25aeaa08",
+                "github_url": "https://github.com/awong1900/Wio_Sample_Project",
+                "status": "pending",
+                "status_text": "waiting import...",
+                "created_at": "2016-11-22T06:56:12.000Z",
+                "updated_at": "2016-11-22T06:56:12.000Z"
             }
         }
     }

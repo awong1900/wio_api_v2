@@ -559,7 +559,7 @@ paths:
               ulbs:
                 type: array
                 items:
-                  $ref: '#/definitions/ulbJson'
+                  $ref: '#/definitions/ulb'
   /v2/firmwares/{firmware_id}/ulbs/{path_name}:
     parameters:
       - name: Authorization
@@ -587,7 +587,7 @@ paths:
       parameters:
         - name: format
           description: |
-            定义返回的数据格式，`raw`|`base64`
+            定义返回的数据格式，`raw`|`base64`，分别为直接返回text文本或者编码成base64格式。
           in: query
           type: string
           required: false
@@ -606,20 +606,31 @@ paths:
         - firmwares
       security:
         - access_token: []
-      summary: ""
-      description: ""
-      responses:
-        200:
-          description: OK
+      consumes:
+        - text/plain
+      parameters:
+        - name: text
+          in: body
+          required: true
+          description: 代码文件text格式
           schema:
-            $ref: '#/definitions/ulbJson'
+            type: string
+      summary: 上传ULB文件
+      description: ""
+      produces:
+        - application/json
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/ulb'
     delete:
       tags:
         - firmwares
       security:
         - access_token: []
-      # summary:
-      # description:
+      summary: 删除指定的ULB文件
+      description: ""
       responses:
         204:
           description: No Content
@@ -642,36 +653,119 @@ paths:
       security:
         - access_token: []
       summary: 编译固件
-      description: 系统会现查找是否存在已经编译好的固件，如果没有，则开始一个编译任务。因此会先返回`202 Accepted`, 当完成后会返回`201 Created`。
+      description: |
+        系统会现查找是否存在已经编译好的固件，如果没有，则开始一个编译任务。因此会先返回`202 Accepted`, 当完成后会返回`201 Created`。
+        > 重复请求可以查询编译状态
       responses:
-        201:
-          description: Created
+        200:
+          description: OK
           schema:
             $ref: "#/definitions/bin"
         202:
           description: Accepted
           schema:
             $ref: "#/definitions/binState"
-  # /v2/firmwares/{firmware_id}/import:
-    # parameters:
-    #   - name: firmware_id
-    #     in: path
-    #     description: 固件项目ID
-    #     required: true
-    #     type: string
-  # /v2/firmwares/{firmware_id}/export:
-    # parameters:
-    #   - name: firmware_id
-    #     in: path
-    #     description: 固件项目ID
-    #     required: true
-    #     type: string
+  /v2/firmwares/{firmware_id}/import:
+    parameters:
+      - name: Authorization
+        in: header
+        type: string
+        description: |
+          认证信息，以`token`开头空格后加上token,如`token your_token`
+        required: false
+      - name: firmware_id
+        in: path
+        description: 固件项目ID
+        required: true
+        type: string
+    put:
+      tags:
+        - firmwares
+      security:
+        - access_token: []
+      consumes:
+        - application/json
+      parameters:
+        - name: body
+          in: body
+          required: true
+          description: |
+            支持三种github链接
+            - 主干`https://github.com/awong1900/Wio_Sample_Project`
+            - 分支`https://github.com/awong1900/Wio_Sample_Project/tree/dev`
+            - 标签`https://github.com/awong1900/Wio_Sample_Project/tree/v0.2.0`
+          schema:
+            type: object
+            properties:
+              github_url:
+                type: string
+                description: 需要导入的WIO项目的github链接
+      summary: 导入WIO固件项目
+      description: |
+        由于导入过程需要一些时间，API会先响应`202`。直到完成导入，响应`201`.
+        > 可以通过GET方法获得响应状态
+      responses:
+        202:
+          description: Accepted
+          schema:
+            $ref: '#/definitions/firmwareImport'
+    get:
+      tags:
+        - firmwares
+      security:
+        - access_token: []
+      summary: 获得固件项目导入状态
+      description: ""
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/firmwareImport'
+    post:
+      tags:
+        - firmwares
+      security:
+        - access_token: []
+      summary: 同步GitHub最新的固件项目文件
+      description: ""
+      responses:
+        202:
+          description: OK
+          schema:
+            $ref: '#/definitions/firmwareImport'
+  /v2/firmwares/{firmware_id}/export:
+    parameters:
+      - name: Authorization
+        in: header
+        type: string
+        description: |
+          认证信息，以`token`开头空格后加上token,如`token your_token`
+        required: false
+      - name: firmware_id
+        in: path
+        description: 固件项目ID
+        required: true
+        type: string
+    get:
+      tags:
+        - firmwares
+      security:
+        - access_token: []
+      parameters:
+        - name: format
+          in: query
+          description: 定义输出的格式，`zipball`(default)|`tarball`
+          required: false
+          type: string
+      responses:
+        200:
+          description: OK
   /v2/drivers:
     get:
       tags:
         - misellaneous
-      # summary:
-      # description:
+      summary: 输出WIO支持的驱动列表
+      description: ""
       responses:
         200:
           description: OK
@@ -736,8 +830,8 @@ paths:
     get:
       tags:
         - misellaneous
-      # summary:
-      # description:
+      summary: 输出WIO支持的设备型号列表
+      description: ""
       responses:
         200:
           description: OK
@@ -833,7 +927,7 @@ paths:
                 ]
               }
 securityDefinitions:
-  # Authorization:
+  # Authorization:  # TODO(ten), try use header to auth
   #   type: apiKey
   #   in: header
   #   name: Authorization
@@ -842,11 +936,11 @@ securityDefinitions:
     in: query
     name: access_token
 definitions:
-  errorMessage:
-    type: object
-    properties:
-      error:
-        type: string
+  # errorMessage:
+  #   type: object
+  #   properties:
+  #     error:
+  #       type: string
   user:
     type: object
     properties:
@@ -1095,23 +1189,23 @@ definitions:
   #       type: array
   #       items:
   #         $ref: "#/definitions/newConnection"
-  newConnection:
-    type: object
-    properties:
-      sku:
-        type: string
-      port:
-        type: string
-        enum:
-          - D0
-          - D1
-          - D2
-          - A0
-          - A1
-          - UART0
-          - I2C0
-          - I2C1
-  ulbJson:
+  # newConnection:
+  #   type: object
+  #   properties:
+  #     sku:
+  #       type: string
+  #     port:
+  #       type: string
+  #       enum:
+  #         - D0
+  #         - D1
+  #         - D2
+  #         - A0
+  #         - A1
+  #         - UART0
+  #         - I2C0
+  #         - I2C1
+  ulb:
     type: object
     properties:
       firmware_id:
@@ -1167,3 +1261,31 @@ definitions:
     properties:
       status:
         type: string
+  firmwareImport:
+    type: object
+    properties:
+      firmware_id:
+        type: string
+      github_url: 
+        type: string
+      status:
+        type: string
+        enum:
+          - pending
+          - importing
+          # TODO(ten), more status
+      status_text: 
+        type: string
+      created_at: 
+        type: string
+        format: dateTime
+      updated_at:
+        type: string
+        format: dateTime
+    example:
+      firmware_id: ad144ec3505641e29555e7de25aeaa08
+      github_url: https://github.com/awong1900/Wio_Sample_Project
+      status: pending
+      status_text: waiting import...
+      created_at: 2016-11-22T06:56:12Z
+      updated_at: 2016-11-22T06:56:12Z

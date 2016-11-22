@@ -77,6 +77,7 @@ ULB(User Logic Block)是用户定义自己的API的逻辑代码。可以通过�
 | 参数 | 类型 | 描述 |
 | ----|---- | ---- |
 | path_name | string | ulb文件相对路径，如'foo/bar.cpp' |
+| fornmat | string | raw|base64 |
 ### PUT 增加或者更新指定的ULB文件
 #### 输入
 采用`Content-Type: text/plain`格式输入。
