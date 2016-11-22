@@ -50,13 +50,14 @@ info:
 schemes:
   - https
 host: wio.forkthings.com
+basePath: /v2
 tags:
   - name: users
   - name: things
   - name: firmwares
   - name: misellaneous
 paths:
-  /v2/user:
+  /user:
     parameters:
       - name: Authorization
         in: header
@@ -87,7 +88,7 @@ paths:
       responses:
         204:
           description: No Content
-  /v2/users:
+  /users:
     parameters:
       - name: Authorization
         in: header
@@ -125,7 +126,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/user'
-  /v2/users/{user_id}:  # Not use
+  /users/{user_id}:  # Not use
     parameters:
       - name: Authorization
         in: header
@@ -160,7 +161,7 @@ paths:
       responses:
         204:
           description: No Content
-  /v2/user/token:
+  /user/token:
     parameters:
       - name: Authorization
         in: header
@@ -180,7 +181,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/userToken'
-  /v2/user/{user_id}/token:
+  /user/{user_id}/token:
     parameters:
       - name: Authorization
         in: header
@@ -206,7 +207,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/userToken'
-  /v2/things:
+  /things:
     parameters:
       - name: Authorization
         in: header
@@ -269,7 +270,7 @@ paths:
           description: Created
           schema:
             $ref: '#/definitions/thing'
-  /v2/things/{thing_id}:
+  /things/{thing_id}:
     parameters:
       - name: Authorization
         in: header
@@ -322,7 +323,7 @@ paths:
       responses:
         204:
           description: No Content
-  /v2/things/{thing_id}/page:
+  /things/{thing_id}/page:
     parameters:
       - name: Authorization
         in: header
@@ -349,7 +350,7 @@ paths:
           description: OK, 通过html页面展示节点可用的Web API操作。
           schema:
             type: string
-  /v2/things/{thing_id}/ota:
+  /things/{thing_id}/ota:
     parameters:
       - name: Authorization
         in: header
@@ -414,7 +415,7 @@ paths:
           description: OK 
           schema:
             $ref: '#/definitions/ota'
-  /v2/firmwares:
+  /firmwares:
     parameters:
       - name: Authorization
         in: header
@@ -474,7 +475,7 @@ paths:
           description: Created
           schema:
             $ref: "#/definitions/firmware"
-  /v2/firmwares/{firmware_id}:
+  /firmwares/{firmware_id}:
     parameters:
       - name: Authorization
         in: header
@@ -529,7 +530,7 @@ paths:
       responses:
         204:
           description: No Content
-  /v2/firmwares/{firmware_id}/ulbs:
+  /firmwares/{firmware_id}/ulbs:
     parameters:
       - name: Authorization
         in: header
@@ -560,7 +561,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/ulb'
-  /v2/firmwares/{firmware_id}/ulbs/{path_name}:
+  /firmwares/{firmware_id}/ulbs/{path_name}:
     parameters:
       - name: Authorization
         in: header
@@ -634,7 +635,7 @@ paths:
       responses:
         204:
           description: No Content
-  /v2/firmwares/{firmware_id}/bin:
+  /firmwares/{firmware_id}/bin:
     parameters:
       - name: Authorization
         in: header
@@ -665,7 +666,7 @@ paths:
           description: Accepted
           schema:
             $ref: "#/definitions/binState"
-  /v2/firmwares/{firmware_id}/import:
+  /firmwares/{firmware_id}/import:
     parameters:
       - name: Authorization
         in: header
@@ -733,7 +734,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/firmwareImport'
-  /v2/firmwares/{firmware_id}/export:
+  /firmwares/{firmware_id}/export:
     parameters:
       - name: Authorization
         in: header
@@ -760,7 +761,7 @@ paths:
       responses:
         200:
           description: OK
-  /v2/drivers:
+  /drivers:
     get:
       tags:
         - misellaneous
@@ -826,7 +827,7 @@ paths:
                   }
                 ]
               }
-  /v2/boards:
+  /boards:
     get:
       tags:
         - misellaneous
