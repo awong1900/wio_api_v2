@@ -255,7 +255,7 @@ paths:
         - access_token: []
       summary: 创建一个节点设备
       description: ""
-      produces:
+      consumes:
         - application/json
       parameters:
         - name: thingParas
@@ -438,7 +438,10 @@ paths:
           type: integer
           description: 每一页的数量
           required: false
-      summary: ""
+        # - name: sort  # TODO(ten)
+        #   in: query
+        #   type: string
+      summary: 获取当前用户的所有固件项目
       description: ""
       responses:
         200:
@@ -455,8 +458,17 @@ paths:
         - firmwares
       security:
         - access_token: []
-      # summary:
-      # description:
+      consumes:
+        - application/json
+      parameters:
+        - name: firmwareParas
+          in: body
+          description: 创建固件项目参数
+          required: true
+          schema:
+            $ref: '#/definitions/newFirmware'
+      summary: 创建一个固件项目
+      description: ""
       responses:
         201:
           description: Created
@@ -472,7 +484,7 @@ paths:
         required: false
       - name: firmware_id
         in: path
-        description: ID of firmware
+        description: 固件项目ID
         required: true
         type: string
     get:
@@ -480,8 +492,8 @@ paths:
         - firmwares
       security:
         - access_token: []
-      # summary:
-      # description:
+      summary: 获取指定固件项目信息
+      description: ""
       responses:
         200:
           description: OK
@@ -492,14 +504,16 @@ paths:
         - firmwares
       security:
         - access_token: []
-    #   summary:
-    #   description:
+      consumes:
+        - application/json
       parameters:
-        - name: modify
+        - name: firmwareParas
           in: body
           required: true
           schema:
-            $ref: "#/definitions/newThing"
+            $ref: "#/definitions/newFirmware"
+      summary: 更新指定项目信息
+      description: ""
       responses:
         200:
           description: OK
@@ -510,8 +524,8 @@ paths:
         - firmwares
       security:
         - access_token: []
-    #   summary:
-    #   description:
+      summary: 删除指定固件项目
+      description: ""
       responses:
         204:
           description: No Content
@@ -525,7 +539,7 @@ paths:
         required: false
       - name: firmware_id
         in: path
-        description: ID of firmware
+        description: 固件项目ID
         required: true
         type: string
     get:
@@ -533,14 +547,19 @@ paths:
         - firmwares
       security:
         - access_token: []
-      # summary:
-      # description:
+      summary:  获取当前用户的所有用户程序文件(ULB)
+      description: ""
+      produces:
+        - application/json
       responses:
         200:
           description: OK
           schema:
-            items:
-              $ref: "#/definitions/ulb"
+            properties:
+              ulbs:
+                type: array
+                items:
+                  $ref: '#/definitions/ulbJson'
   /v2/firmwares/{firmware_id}/ulbs/{path_name}:
     parameters:
       - name: Authorization
@@ -551,12 +570,12 @@ paths:
         required: false
       - name: firmware_id
         in: path
-        description: ID of firmware
+        description: 固件项目ID
         required: true
         type: string
       - name: path_name
         description: |
-          ulb file relative path, such as `/foo/bar.cpp`
+          ulb文件相对路径，如`/foo/bar.cpp`
         in: path
         type: string
         required: true
@@ -565,39 +584,35 @@ paths:
         - firmwares
       security:
         - access_token: []
-      # summary:
-      # description:
+      parameters:
+        - name: format
+          description: |
+            定义返回的数据格式，`raw`|`base64`
+          in: query
+          type: string
+          required: false
+      summary: 获取指定的ULB文件
+      description: ""
+      produces:
+        - text/plain
+        - application/json
       responses:
         200:
           description: OK
           schema:
             type: string
-          examples:
-            text: |
-              #include "wio.h"
-              #include "suli2.h"
-              #include "Main.h"
-              
-              void setup()
-              {
-              }
-              
-              void loop()
-              {
-              
-              }
     put:
       tags:
         - firmwares
       security:
         - access_token: []
-      # summary:
-      # description:
+      summary: ""
+      description: ""
       responses:
         200:
           description: OK
           schema:
-            $ref: "#/definitions/ulb"
+            $ref: '#/definitions/ulbJson'
     delete:
       tags:
         - firmwares
@@ -618,7 +633,7 @@ paths:
         required: false
       - name: firmware_id
         in: path
-        description: ID of firmware
+        description: 固件项目ID
         required: true
         type: string
     get:
@@ -637,22 +652,20 @@ paths:
           description: Accepted
           schema:
             $ref: "#/definitions/binState"
-
   # /v2/firmwares/{firmware_id}/import:
     # parameters:
     #   - name: firmware_id
     #     in: path
-    #     description: ID of firmware
+    #     description: 固件项目ID
     #     required: true
     #     type: string
   # /v2/firmwares/{firmware_id}/export:
     # parameters:
     #   - name: firmware_id
     #     in: path
-    #     description: ID of firmware
+    #     description: 固件项目ID
     #     required: true
     #     type: string
-
   /v2/drivers:
     get:
       tags:
@@ -1032,14 +1045,14 @@ definitions:
       config:
         $ref: "#/definitions/config"
     example:
-      name: Hello-World
+      name: myWioFirmware
       desc: First firmware
       config: {
       	board_name: Wio Link v1.0,
       	connections: [
       	  {sku: 101020019-ffff, port: D0}
-      	  ]
-        }
+        ]
+      }
   config:
     type: object
     properties:
@@ -1056,7 +1069,7 @@ definitions:
       board_name: Wio Link v1.0
       connections: [
         {sku: 101020019-ffff, port: D0}
-        ]
+      ]
   connection:
     type: object
     properties:
@@ -1070,18 +1083,18 @@ definitions:
     example:
       sku: 101020019-ffff
       port: D0
-  newConfig:
-    type: object
-    properties:
-      board_name:
-        type: string
-        enum:
-          - Wio Link v1.0
-          - Wio Node v1.0
-      connections:
-        type: array
-        items:
-          $ref: "#/definitions/newConnection"
+  # newConfig:
+  #   type: object
+  #   properties:
+  #     board_name:
+  #       type: string
+  #       enum:
+  #         - Wio Link v1.0
+  #         - Wio Node v1.0
+  #     connections:
+  #       type: array
+  #       items:
+  #         $ref: "#/definitions/newConnection"
   newConnection:
     type: object
     properties:
@@ -1098,7 +1111,7 @@ definitions:
           - UART0
           - I2C0
           - I2C1
-  ulb:
+  ulbJson:
     type: object
     properties:
       firmware_id:
@@ -1154,4 +1167,3 @@ definitions:
     properties:
       status:
         type: string
-        
