@@ -52,6 +52,13 @@ schemes:
 # host: localhost:16080  # local test
 host: wio.forkthings.com
 basePath: /v2
+consumes:
+  - application/json
+  - text/plain
+produces:
+  - application/json
+  - text/plain
+  - text/html
 tags:
   - name: users
   - name: things
@@ -870,6 +877,11 @@ securityDefinitions:
     description: |
       认证信息，通过query参数access_token方式添加token。
 definitions:
+  timestamp:
+    type: string
+    format: dateTime
+    description: ISO 8601/RFC3339 formatted DateTime
+    example: 2016-11-22T02:25:01Z
   # errorMessage:
   #   type: object
   #   properties:
@@ -881,8 +893,7 @@ definitions:
       user_id:
         type: string
       created_at:
-        type: string
-        format: dateTime
+        $ref: '#/definitions/timestamp'
     example:
       user_id: mbrXAWhtKocpgb5mp4XVZb7hz0x2
       created_at: 2016-11-21T02:25:01Z
@@ -894,14 +905,11 @@ definitions:
       user_id:
         type: string
       expire:
-        type: string
-        format: dateTime
+        $ref: '#/definitions/timestamp'
       created_at:
-        type: string
-        format: dateTime
+        $ref: '#/definitions/timestamp'
       updated_at:
-        type: string
-        format: dateTime
+        $ref: '#/definitions/timestamp'
     example:
       user_id: mbrXAWhtKocpgb5mp4XVZb7hz0x2
       token: Mev326aO4gODGY0exYt4bmDmX7u2
@@ -947,11 +955,9 @@ definitions:
       page_url:
         type: string
       created_at:
-        type: string
-        format: dateTime
+        $ref: '#/definitions/timestamp'
       updated_at:
-        type: string
-        format: dateTime
+        $ref: '#/definitions/timestamp'
     example:
       thing_id: 12a9d0922562456a9fdf0b55c20b29ea
       user_id: 160979
@@ -972,8 +978,7 @@ definitions:
       firmware_id:
         type: string
       ota_at:
-        type: string
-        format: dateTime
+        $ref: '#/definitions/timestamp'
       status:
         type: string
         enum:
@@ -986,8 +991,7 @@ definitions:
       status_text:
         type: string
       updated_at:
-        type: string
-        format: dateTime
+        $ref: '#/definitions/timestamp'
     example:
       thing_id: 049f867bad4f4f0db302df7798cd94e6
       firmware_id: ad144ec3505641e29555e7de25aeaa08
@@ -1001,8 +1005,7 @@ definitions:
       firmware_id:
         type: string
       ota_at:
-        type: string
-        format: dateTime
+        $ref: '#/definitions/timestamp'
     required:
       - firmware_id
     example:
@@ -1014,8 +1017,7 @@ definitions:
       firmware_id:
         type: string
       ota_at:
-        type: string
-        format: dateTime
+        $ref: '#/definitions/timestamp'
     example:
       firmware_id: ad144ec3505641e29555e7de25aeaa08
       ota_at: 2016-12-20T00:00:00Z
@@ -1043,11 +1045,9 @@ definitions:
       config:
         $ref: "#/definitions/config"
       created_at:
-        type: string
-        format: dateTime
+        $ref: '#/definitions/timestamp'
       updated_at:
-        type: string
-        format: dateTime
+        $ref: '#/definitions/timestamp'
     example:
       firmware_id: a6c91046291049e9a9357dd535c91598
       user_id: 160979
@@ -1160,11 +1160,9 @@ definitions:
       sha:
         type: string
       created_at:
-        type: string
-        format: dateTime
+        $ref: '#/definitions/timestamp'
       updated_at:
-        type: string
-        format: dateTime
+        $ref: '#/definitions/timestamp'
     example:
       firmware_id: a6c91046291049e9a9357dd535c91598
       path: gen.cpp
@@ -1211,11 +1209,9 @@ definitions:
       status_text: 
         type: string
       created_at: 
-        type: string
-        format: dateTime
+        $ref: '#/definitions/timestamp'
       updated_at:
-        type: string
-        format: dateTime
+        $ref: '#/definitions/timestamp'
     example:
       firmware_id: ad144ec3505641e29555e7de25aeaa08
       github_url: https://github.com/awong1900/Wio_Sample_Project
