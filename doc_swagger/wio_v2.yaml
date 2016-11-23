@@ -103,16 +103,8 @@ paths:
         以用
         > 只有认证用户为系统管理员时，才会返回所有用户信息。如何[添加管理员]()
       parameters:
-        - name: page
-          in: query
-          type: integer
-          description: 请求第几页
-          required: false
-        - name: per_page
-          in: query
-          type: integer
-          description: 每一页的数量
-          required: false
+        - $ref: '#/parameters/page'
+        - $ref: '#/parameters/per_page'
       responses:
         200:
           description: OK
@@ -125,11 +117,7 @@ paths:
                   $ref: '#/definitions/user'
   /users/{user_id}:  # Not use
     parameters:
-      - name: user_id
-        in: path
-        description: 指定用户ID
-        required: true
-        type: string
+      - $ref: '#/parameters/user_id'
     # get:
     #   tags:
     #     - users
@@ -176,11 +164,7 @@ paths:
         - Authorization: []
         - access_token: []
       parameters:
-        - name: user_id
-          in: path
-          description: 用户ID
-          required: true
-          type: string
+        - $ref: '#/parameters/user_id'
       summary: 获取指定用户token信息
       description: 需要此用户权限或者管理员权限
       responses:
@@ -196,16 +180,8 @@ paths:
         - Authorization: []
         - access_token: []
       parameters:
-        - name: page
-          in: query
-          type: integer
-          description: 请求第几页
-          required: false
-        - name: per_page
-          in: query
-          type: integer
-          description: 每一页的数量
-          required: false
+         - $ref: '#/parameters/page'
+         - $ref: '#/parameters/per_page'
         # - name: sort  # TODO(ten): desc
         #   in: query
         #   required: false
@@ -248,11 +224,7 @@ paths:
             $ref: '#/definitions/thing'
   /things/{thing_id}:
     parameters:
-      - name: thing_id
-        in: path
-        description: 节点设备ID
-        required: true
-        type: string
+      - $ref: '#/parameters/thing_id'
     get:
       tags:
         - things
@@ -298,11 +270,7 @@ paths:
           description: No Content
   /things/{thing_id}/page:
     parameters:
-      - name: thing_id
-        in: path
-        description: 节点设备ID
-        required: true
-        type: string
+      - $ref: '#/parameters/thing_id'
     get:
       tags:
         - things
@@ -320,11 +288,7 @@ paths:
             type: string
   /things/{thing_id}/ota:
     parameters:
-      - name: thing_id
-        in: path
-        description: 节点设备ID
-        required: true
-        type: string
+      - $ref: '#/parameters/thing_id'
     get:
       tags:
         - things
@@ -388,16 +352,8 @@ paths:
         - Authorization: []
         - access_token: []
       parameters:
-        - name: page
-          in: query
-          type: integer
-          description: 请求第几页
-          required: false
-        - name: per_page
-          in: query
-          type: integer
-          description: 每一页的数量
-          required: false
+         - $ref: '#/parameters/page'
+         - $ref: '#/parameters/per_page'
         # - name: sort  # TODO(ten)
         #   in: query
         #   type: string
@@ -437,11 +393,7 @@ paths:
             $ref: "#/definitions/firmware"
   /firmwares/{firmware_id}:
     parameters:
-      - name: firmware_id
-        in: path
-        description: 固件项目ID
-        required: true
-        type: string
+      - $ref: '#/parameters/firmware_id'
     get:
       tags:
         - firmwares
@@ -489,11 +441,7 @@ paths:
           description: No Content
   /firmwares/{firmware_id}/ulbs:
     parameters:
-      - name: firmware_id
-        in: path
-        description: 固件项目ID
-        required: true
-        type: string
+      - $ref: '#/parameters/firmware_id'
     get:
       tags:
         - firmwares
@@ -515,11 +463,7 @@ paths:
                   $ref: '#/definitions/ulb'
   /firmwares/{firmware_id}/ulbs/{path_name}:
     parameters:
-      - name: firmware_id
-        in: path
-        description: 固件项目ID
-        required: true
-        type: string
+      - $ref: '#/parameters/firmware_id'
       - name: path_name
         description: |
           ulb文件相对路径，如`/foo/bar.cpp`
@@ -586,11 +530,7 @@ paths:
           description: No Content
   /firmwares/{firmware_id}/bin:
     parameters:
-      - name: firmware_id
-        in: path
-        description: 固件项目ID
-        required: true
-        type: string
+      - $ref: '#/parameters/firmware_id'
     get:
       tags:
         - firmwares
@@ -612,11 +552,7 @@ paths:
             $ref: "#/definitions/binState"
   /firmwares/{firmware_id}/import:
     parameters:
-      - name: firmware_id
-        in: path
-        description: 固件项目ID
-        required: true
-        type: string
+      - $ref: '#/parameters/firmware_id'
     put:
       tags:
         - firmwares
@@ -677,11 +613,7 @@ paths:
             $ref: '#/definitions/firmwareImport'
   /firmwares/{firmware_id}/export:
     parameters:
-      - name: firmware_id
-        in: path
-        description: 固件项目ID
-        required: true
-        type: string
+      - $ref: '#/parameters/firmware_id'
     get:
       tags:
         - firmwares
@@ -876,6 +808,41 @@ securityDefinitions:
     in: query
     description: |
       认证信息，通过query参数access_token方式添加token。
+parameters:
+  user_id:
+    name: user_id
+    in: path
+    description: 用户ID
+    required: true
+    type: string
+  thing_id:
+    name: thing_id
+    in: path
+    description: 节点设备ID
+    required: true
+    type: string
+  firmware_id:
+    name: firmware_id
+    in: path
+    description: 固件项目ID
+    required: true
+    type: string
+  page:
+    name: page
+    in: query
+    description: 请求第几页
+    default: 1
+    required: false
+    type: integer
+  per_page:
+    name: per_page
+    in: query
+    description: 每一页的数量
+    default: 20
+    minimum: 1
+    maximum: 100
+    type: integer
+    required: false
 definitions:
   timestamp:
     type: string
