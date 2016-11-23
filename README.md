@@ -6,5 +6,8 @@
 - doc_apiaiy: apiary文档
 
 ## 使用说明
-1. 打开https://awong1900.github.io/quickstart-js/ 拿到token
-2. 打开https://awong1900.github.io/wio_api_v2/ 使用API
+1. 获得SSO token
+    - Seeed SSO，https://wio.seeed.io/login
+    - Firebase SSO，https://awong1900.github.io/quickstart-js/
+2. https://awong1900.github.io/wio_api_v2/ 填写认证token
+3. 现在就可以使用Wio API了
