@@ -4,12 +4,15 @@ info:
   version: v2
   title: Wio API v2
   description: |
-    > 1. 从Seeed SSO获得token，https://wio.seeed.io/login
-    > 2. 点击右上角`Authorize`填写认证token
-    > 3. 现在就可以使用Wio API了
-    
     Wio IOT 平台是一款物联网应用平台，真正的WOT产品。Restful API帮助用户完成产品定义和部署。
 
+    ## 在线测试
+    1. 从Seeed SSO获得token，https://wio.seeed.io/login
+    
+    2. 点击右上角`Authorize`填写认证token
+    
+    3. 现在就可以使用Wio API了
+    
     ## 端点
     API请求的端点为
 
