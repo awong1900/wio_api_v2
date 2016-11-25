@@ -8,11 +8,11 @@ info:
 
     ## 在线测试
     1. 从Seeed SSO获得token，https://wio.seeed.io/login
-    
+
     2. 点击右上角`Authorize`填写认证token
-    
+
     3. 现在就可以使用Wio API了
-    
+
     ## 端点
     API请求的端点为
 
@@ -463,6 +463,8 @@ paths:
         200:
           description: OK
           schema:
+            type: object
+            title: response
             properties:
               ulbs:
                 type: array
@@ -802,6 +804,31 @@ paths:
                   }
                 ]
               }
+  /driver-test:
+    post:
+      tags:
+        - misellaneous
+      security:
+        - Authorization: []
+        - access_token: []
+      summary: 测试编译用户自开发模块驱动
+      description: 用户可为第三方模块编写驱动，参考[Wio v1.0驱动开发指南](https://github.com/Seeed-Studio/Wio_Link/wiki/How-to-write-module-driver-for-Wio-Link%3F)。编写完成后，使用此API测试驱动是否正常工作。此API接收驱动源代码，检查源代码正确性，并自动创建一个固件以供用户OTA到硬件进行测试。
+      consumes:
+        - application/json
+      parameters:
+        - name: driverSrcs
+          in: body
+          description: The list of driver source code.
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/driverSrc'
+      responses:
+        200:
+          description: Passed the static check and created a firmware project.
+          schema:
+            $ref: '#/definitions/driverObject'
 securityDefinitions:
   Authorization:
     type: apiKey
@@ -853,7 +880,7 @@ parameters:
 definitions:
   timestamp:
     type: string
-    format: dateTime
+    format: date-time
     description: ISO 8601/RFC3339 formatted DateTime
     example: 2016-11-22T02:25:01Z
   # errorMessage:
@@ -1030,7 +1057,7 @@ definitions:
       firmware_type: flexible
       fixed_url: ""
       bin_url: ""
-      size: ""
+      size: 120000
       sha: ""
       config:
         board_name: Wio Link v1.0
@@ -1138,15 +1165,8 @@ definitions:
       updated_at:
         $ref: '#/definitions/timestamp'
     example:
-      firmware_id: a6c91046291049e9a9357dd535c91598
-      path: gen.cpp
-      name: gen.cpp
-      content: "\n#include \"suli2.h\"\n#include \"rpc_server.h\"\n#include \"rpc_stream.h\"\n#include \"Main.h\"\n\n\n\nvoid rpc_server_register_resources()\n{\n\n}\n\n"
-      encoding: plain
-      size: 132
-      sha: 05e7ba1a58a00342e916da97567c6a610ae5ade7
-      created_at: 2016-11-21T03:41:52Z
-      updated_at: 2016-11-21T03:41:52Z
+      sku: 120599876
+      port: D0
   binState:
     type: object
     properties:
@@ -1193,3 +1213,49 @@ definitions:
       status_text: waiting import...
       created_at: 2016-11-22T06:56:12Z
       updated_at: 2016-11-22T06:56:12Z
+  driverSrc:
+    type: object
+    properties:
+      name:
+        type: string
+      content:
+        type: string
+    example:
+      name: driver_x.h
+      content: "here is the source code"
+  driverObject:
+    type: object
+    properties:
+      user_id:
+        type: string
+      sku:
+        type: string
+      firmware_id:
+        type: string
+      created_at:
+        $ref: '#/definitions/timestamp'
+      updated_at:
+        $ref: '#/definitions/timestamp'
+      firmware:
+        $ref: '#/definitions/firmware'
+    example:
+      user_id: 2349724074207
+      sku: 12864565
+      firmware_id: ad144ec3505641e29555e7de25aeaa08
+      created_at: 2016-11-25T16:56:12Z
+      updated_at: 2016-11-25T16:56:13Z
+      firmware:
+        firmware_id: a6c91046291049e9a9357dd535c91598
+        user_id: 160979
+        name: Hello-World
+        desc: First firmware
+        firmware_type: flexible
+        fixed_url: ""
+        bin_url: ""
+        size: 120000
+        sha: ""
+        config:
+          board_name: Wio Link v1.0
+          connections: []
+        created_at: 2016-11-21T03:41:52Z
+        updated_at: 2016-11-21T03:41:52Z
