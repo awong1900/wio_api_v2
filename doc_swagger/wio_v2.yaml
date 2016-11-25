@@ -4,6 +4,10 @@ info:
   version: v2
   title: Wio API v2
   description: |
+    > 1. 从Seeed SSO获得token，https://wio.seeed.io/login
+    > 2. 点击右上角`Authorize`填写认证token
+    > 3. 现在就可以使用Wio API了
+    
     Wio IOT 平台是一款物联网应用平台，真正的WOT产品。Restful API帮助用户完成产品定义和部署。
 
     ## 端点
@@ -321,7 +325,7 @@ paths:
         - 当`ota_at`参数在，且大于当前时间时，提交定时OTA
       responses:
         200:
-          description: OK 
+          description: OK
           schema:
             $ref: '#/definitions/ota'
     patch:
@@ -341,7 +345,7 @@ paths:
         可以通过参数修改OTA时间，固件版本或者取消升级。
       responses:
         200:
-          description: OK 
+          description: OK
           schema:
             $ref: '#/definitions/ota'
   /firmwares:
@@ -1165,7 +1169,7 @@ definitions:
     properties:
       firmware_id:
         type: string
-      github_url: 
+      github_url:
         type: string
       status:
         type: string
@@ -1173,9 +1177,9 @@ definitions:
           - pending
           - importing
           # TODO(ten), more status
-      status_text: 
+      status_text:
         type: string
-      created_at: 
+      created_at:
         $ref: '#/definitions/timestamp'
       updated_at:
         $ref: '#/definitions/timestamp'
