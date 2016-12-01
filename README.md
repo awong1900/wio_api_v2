@@ -2,6 +2,7 @@
 
 - docs: API展示页面, Swagger UI界面
 - doc_swagger: api swagger编辑文件
+    - 通过http://editor.swagger.io/生成json丢到docs目录
 - doc_md: md格式文档
 - doc_apiaiy: apiary文档
 
