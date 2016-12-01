@@ -4,7 +4,7 @@ info:
   version: v2
   title: Wio API v2
   description: |
-    Wio IOT 平台是一款物联网应用平台，真正的WOT产品。Restful API帮助用户完成产品定义和部署。
+    Wio IOT platform is a networking application platform, the real WOT products. The Restful API helps users to complete product definition and deployment.
 
     ## Online test
     1. Get access token from Seeed SSO page:https://wio.seeed.io/login
@@ -29,31 +29,46 @@ info:
 
         curl https://wio.seeed.io/v2?access_token=YOUR-TOKEN
 
-    ## 响应码
-    API完全遵循HTTP 状态码协议规定，不同响应码：
+    ## HTTP Verbs
+    Standard HTTP verbs to indicate intent of a request:
 
-    状态码 | 描述
+    Verbs | Description
+    ---|---
+    GET | Retrieve a resource or a collection of resources
+    POST | Create a resource
+    PATCH | Modify a resource
+    PUT | Set a resource
+
+    ## HTTP Status Codes
+    HTTP status codes to indicate success or failure of a request.
+
+    Codes | Description
     ---|---
     200 | OK
     201 | Created
     202 | Accepted
     302 | Retry
     400 | Bad Request
+    401 | Unauthorized
     403 | Forbidden
     404 | Not Found
     405 | Method Not Allowed
     500 | Internal Server Error
 
-    ## Error
-    All client errors on API calls that receive request bodies: `400 Bad Request response`. Custom error will always have a `error` field describing the error,
-    ```
-    HTTP/1.1 400 Bad Request
+    ## Errors
+    All 400 series errors (400, 401, 403, etc) will be returned with a JSON object in the body and a `application/json` content type.
 
-    {"error": "Invalid user"}
-    ```
+        {
+            "error": "Invalid user"
+        }
 
-    ## Timezones
-    We use UTC as the timezone, and explicitly provide an ISO 8601 timestamp. Such as`2016-12-28T12:05:05Z`
+    500 series error codes (500, 501, 502, etc) do not return JSON bodies.
+
+    ## Timestamps
+    Timestamps are in [UTC](http://en.wikipedia.org/wiki/Coordinated_Universal_Time) and formatted as [ISO8601](http://en.wikipedia.org/wiki/ISO_8601).
+
+    Such as`2016-12-28T12:05:05Z`
+
 schemes:
   - https
 # host: localhost:16080  # local test
