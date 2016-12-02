@@ -3,7 +3,7 @@
     "info": {
         "version": "v2",
         "title": "Wio API v2",
-        "description": "Wio IOT platform is a networking application platform, the real WOT products. The Restful API helps users to complete product definition and deployment.\n\n## Online test\n1. Get access token from Seeed SSO page:https://wio.seeed.io/login\n\n2. Click 'Authorize' on the upper right, then enter the access token\n\n3. Now, you can test APIs on this page\n\n## Root Endpoint\n\n    https://wio.seeed.io/v2\n    https://wio.forkthings.com/v2 (test)\n\n## Authentication\nThere are two ways to authenticate through Wio API v2. Requests that require authentication will return `403 Forbidden`.\n\n- Access Token (sent in a header)\n\n    curl -H \"Authorization: token YOUR-TOKEN\" https://wio.seeed.io/v2\n\n- Access Token (sent in a parameter)\n\n    curl https://wio.seeed.io/v2?access_token=YOUR-TOKEN\n\n## HTTP Verbs\nStandard HTTP verbs to indicate intent of a request:\n\nVerbs | Description\n---|---\nGET | Retrieve a resource or a collection of resources\nPOST | Create a resource\nPATCH | Modify a resource\nPUT | Set a resource\n\n## HTTP Status Codes\nHTTP status codes to indicate success or failure of a request.\n\nCodes | Description\n---|---\n200 | OK\n201 | Created\n202 | Accepted\n302 | Retry\n400 | Bad Request\n401 | Unauthorized\n403 | Forbidden\n404 | Not Found\n405 | Method Not Allowed\n500 | Internal Server Error\n\n## Errors\nAll 400 series errors (400, 401, 403, etc) will be returned with a JSON object in the body and a `application/json` content type.\n\n    {\n        \"error\": \"Invalid user\"\n    }\n\n500 series error codes (500, 501, 502, etc) do not return JSON bodies.\n\n## Timestamps\nTimestamps are in [UTC](http://en.wikipedia.org/wiki/Coordinated_Universal_Time) and formatted as [ISO8601](http://en.wikipedia.org/wiki/ISO_8601).\n\nSuch as`2016-12-28T12:05:05Z`\n"
+        "description": "> Other language: [`CN`](https://awong1900.github.io/wio_api_v2/cn)\n\nWio IOT platform is a networking application platform, the real WOT products. The Restful API helps users to complete product definition and deployment.\n\n## Online test\n1. Get access token from Seeed SSO page:https://wio.seeed.io/login\n\n2. Click 'Authorize' on the upper right, then enter the access token\n\n3. Now, you can test APIs on this page\n\n## Root Endpoint\n\n    https://wio.seeed.io/v2\n    https://wio.forkthings.com/v2 (test)\n\n## Authentication\nThere are two ways to authenticate through Wio API v2. Requests that require authentication will return `403 Forbidden`.\n\n- Access Token (sent in a header)\n\n    curl -H \"Authorization: token YOUR-TOKEN\" https://wio.seeed.io/v2\n\n- Access Token (sent in a parameter)\n\n    curl https://wio.seeed.io/v2?access_token=YOUR-TOKEN\n\n## HTTP Verbs\nStandard HTTP verbs to indicate intent of a request:\n\nVerbs | Description\n---|---\nGET | Retrieve a resource or a collection of resources\nPOST | Create a resource\nPATCH | Modify a resource\nPUT | Set a resource\n\n## HTTP Status Codes\nHTTP status codes to indicate success or failure of a request.\n\nCodes | Description\n---|---\n200 | OK\n201 | Created\n202 | Accepted\n302 | Retry\n400 | Bad Request\n401 | Unauthorized\n403 | Forbidden\n404 | Not Found\n405 | Method Not Allowed\n500 | Internal Server Error\n\n## Errors\nAll 400 series errors (400, 401, 403, etc) will be returned with a JSON object in the body and a `application/json` content type.\n\n    {\n        \"error\": \"Invalid user\"\n    }\n\n500 series error codes (500, 501, 502, etc) do not return JSON bodies.\n\n## Timestamps\nTimestamps are in [UTC](http://en.wikipedia.org/wiki/Coordinated_Universal_Time) and formatted as [ISO8601](http://en.wikipedia.org/wiki/ISO_8601).\n\nSuch as`2016-12-28T12:05:05Z`\n"
     },
     "schemes": [
         "https"
@@ -92,7 +92,7 @@
                         "access_token": []
                     }
                 ],
-                "summary": "获取所有用户ID",
+                "summary": "Gets all user",
                 "description": "> Only the authenticated user is the system administrator, will return all user information.\n",
                 "parameters": [
                     {
@@ -388,7 +388,7 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK, 通过html页面展示节点可用的Web API操作。",
+                        "description": "OK, The Web API display available APIs of device through the html page.\n",
                         "schema": {
                             "type": "string"
                         }
@@ -480,7 +480,7 @@
                         }
                     }
                 ],
-                "summary": "修改OTA设置",
+                "summary": "Modify the OTA settings",
                 "description": "You can modify the OTA time, the firmware version, or cancel the upgrade.\n",
                 "responses": {
                     "200": {
@@ -773,7 +773,7 @@
                         }
                     }
                 ],
-                "summary": "上传ULB文件",
+                "summary": "Upload the ULB file",
                 "description": "",
                 "produces": [
                     "application/json"

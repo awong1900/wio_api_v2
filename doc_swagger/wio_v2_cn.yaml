@@ -4,6 +4,8 @@ info:
   version: v2
   title: Wio API v2
   description: |
+    > 切换语言: [`EN`](https://awong1900.github.io/wio_api_v2/)
+
     Wio IOT 平台是一款物联网应用平台，真正的WOT产品。Restful API帮助用户完成产品定义和部署。
 
     ## 在线测试

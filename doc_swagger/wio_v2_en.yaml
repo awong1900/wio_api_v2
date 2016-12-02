@@ -4,6 +4,8 @@ info:
   version: v2
   title: Wio API v2
   description: |
+    > Other language: [`CN`](https://awong1900.github.io/wio_api_v2/cn)
+
     Wio IOT platform is a networking application platform, the real WOT products. The Restful API helps users to complete product definition and deployment.
 
     ## Online test
@@ -122,7 +124,7 @@ paths:
       security:
         - Authorization: []
         - access_token: []
-      summary: 获取所有用户ID
+      summary: Gets all user
       description: |
         > Only the authenticated user is the system administrator, will return all user information.
       parameters:
@@ -306,7 +308,8 @@ paths:
         - text/html
       responses:
         200:
-          description: OK, 通过html页面展示节点可用的Web API操作。
+          description: |
+            OK, The Web API display available APIs of device through the html page.
           schema:
             type: string
   /things/{thing_id}/ota:
@@ -359,7 +362,7 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/updateOta'
-      summary: 修改OTA设置
+      summary: Modify the OTA settings
       description: |
         You can modify the OTA time, the firmware version, or cancel the upgrade.
       responses:
@@ -533,7 +536,7 @@ paths:
           description: The code file is in text format
           schema:
             type: string
-      summary: 上传ULB文件
+      summary: Upload the ULB file
       description: ""
       produces:
         - application/json
