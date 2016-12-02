@@ -95,9 +95,9 @@ paths:
       security:
         - Authorization: []
         - access_token: []
-      summary: 获取当前用户ID
+      summary: Get the authenticated user
       description: |
-        根据提交的token找到当前用户，如果第一次登陆，则先传递token到SSO系统，认证成功后，存储用户到当前系统。
+        According to the token to find the current user, if the first landing, the token is passed to the SSO system, authentication is successful, the user stored to the current system.
       responses:
         200:
           description: OK
@@ -109,8 +109,9 @@ paths:
       security:
         - Authorization: []
         - access_token: []
-      summary: 删除当前用户
-      description: 同时会删除用户所有的节点设备和项目数据，请小心使用。
+      summary: Get the authenticated user
+      description: |
+        Also delete all thing and firmware datas of the user, please be careful to use.
       responses:
         204:
           description: No Content
@@ -123,8 +124,7 @@ paths:
         - access_token: []
       summary: 获取所有用户ID
       description: |
-        以用
-        > 只有认证用户为系统管理员时，才会返回所有用户信息。如何[添加管理员]()
+        > Only the authenticated user is the system administrator, will return all user information.
       parameters:
         - $ref: '#/parameters/page'
         - $ref: '#/parameters/per_page'
@@ -160,8 +160,8 @@ paths:
       security:
         - Authorization: []
         - access_token: []
-      summary: 删除指定用户
-      description: 需要此用户权限或者管理员权限
+      summary: Delete a single user
+      description: Requires this user or administrator permissions
       responses:
         204:
           description: No Content
@@ -172,7 +172,7 @@ paths:
       security:
         - Authorization: []
         - access_token: []
-      summary: 获取当前用户token信息
+      summary: Get the authenticated user token information
       description: ""
       responses:
         200:
@@ -188,8 +188,8 @@ paths:
         - access_token: []
       parameters:
         - $ref: '#/parameters/user_id'
-      summary: 获取指定用户token信息
-      description: 需要此用户权限或者管理员权限
+      summary: Get the single user token information
+      description: Requires this user or administrator permissions
       responses:
         200:
           description: OK
@@ -211,7 +211,7 @@ paths:
         #   type: array
         #   items:
         #     type: string
-      summary: 列出当前用户的所有节点设备
+      summary: List things that are accessible to the authenticated user.
       description: ""
       responses:
         200:
@@ -229,14 +229,14 @@ paths:
       security:
         - Authorization: []
         - access_token: []
-      summary: 创建一个节点设备
+      summary: Create a new thing for the authenticated user. 
       description: ""
       consumes:
         - application/json
       parameters:
         - name: thingParas
           in: body
-          description: 创建节点设备参数
+          description: Input
           required: true
           schema:
             $ref: '#/definitions/newThing'
@@ -254,7 +254,7 @@ paths:
       security:
         - Authorization: []
         - access_token: []
-      summary: 获取节点设备信息
+      summary: Get a thing
       description: ""
       responses:
         200:
@@ -273,7 +273,7 @@ paths:
           required: true
           schema:
             $ref: "#/definitions/newThing"
-      summary: 更新节点设备信息
+      summary: Update a thing
       description: ""
       responses:
         200:
@@ -286,7 +286,7 @@ paths:
       security:
         - Authorization: []
         - access_token: []
-      summary: 删除节点设备
+      summary: Delete a thing
       description: ""
       responses:
         204:
@@ -300,7 +300,7 @@ paths:
       security:
         - Authorization: []
         - access_token: []
-      summary: 获取节点设备的API页面
+      summary: Get a thing APIs page
       description: ""
       produces:
         - text/html
@@ -318,9 +318,9 @@ paths:
       security:
         - Authorization: []
         - access_token: []
-      summary: 获得当前的OTA信息
+      summary: Get the OTA info for the authenticated user.
       description: |
-        显示OTA的状态和定时OTA的时间等。
+        Display the state and date-time of OTA.
       responses:
         200:
           description: OK
@@ -338,10 +338,10 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/newOta'
-      summary: 立即或定时升级节点设备固件
+      summary: Upgrade the thing device firmware immediately or timed upgrade.
       description: |
-        - 当`ota_at`参数不在时，立即提交OTA操作
-        - 当`ota_at`参数在，且大于当前时间时，提交定时OTA
+        - when `ota_at` field is null，immediately upgrade
+        - when `ota_at` field is valid date-time，timed upgrade
       responses:
         200:
           description: OK
@@ -361,7 +361,7 @@ paths:
             $ref: '#/definitions/updateOta'
       summary: 修改OTA设置
       description: |
-        可以通过参数修改OTA时间，固件版本或者取消升级。
+        You can modify the OTA time, the firmware version, or cancel the upgrade.
       responses:
         200:
           description: OK
@@ -380,7 +380,7 @@ paths:
         # - name: sort  # TODO(ten)
         #   in: query
         #   type: string
-      summary: 获取当前用户的所有固件项目
+      summary: Gets all the firmware items for the current user
       description: ""
       responses:
         200:
@@ -403,11 +403,11 @@ paths:
       parameters:
         - name: firmwareParas
           in: body
-          description: 创建固件项目参数
+          description: Input
           required: true
           schema:
             $ref: '#/definitions/newFirmware'
-      summary: 创建一个固件项目
+      summary: Create a firmware
       description: ""
       responses:
         201:
@@ -423,7 +423,7 @@ paths:
       security:
         - Authorization: []
         - access_token: []
-      summary: 获取指定固件项目信息
+      summary: Get a firmware
       description: ""
       responses:
         200:
@@ -444,7 +444,7 @@ paths:
           required: true
           schema:
             $ref: "#/definitions/newFirmware"
-      summary: 更新指定项目信息
+      summary: Update a firmware
       description: ""
       responses:
         200:
@@ -457,7 +457,7 @@ paths:
       security:
         - Authorization: []
         - access_token: []
-      summary: 删除指定固件项目
+      summary: Delete a firmware
       description: ""
       responses:
         204:
@@ -471,7 +471,7 @@ paths:
       security:
         - Authorization: []
         - access_token: []
-      summary:  获取当前用户的所有用户程序文件(ULB)
+      summary:  Get all user program files (ULB) for the current user
       description: ""
       produces:
         - application/json
@@ -491,7 +491,7 @@ paths:
       - $ref: '#/parameters/firmware_id'
       - name: path_name
         description: |
-          ulb文件相对路径，如`/foo/bar.cpp`
+          Ulb file relative path, such as `/foo/bar.cpp`
         in: path
         type: string
         required: true
@@ -504,11 +504,11 @@ paths:
       parameters:
         - name: format
           description: |
-            定义返回的数据格式，`raw`|`base64`，分别为直接返回text文本或者编码成base64格式。
+            Definition of the data format, `raw` |` base64`, directly return text or encoded into base64 format.
           in: query
           type: string
           required: false
-      summary: 获取指定的ULB文件
+      summary: Gets the specified ULB file
       description: ""
       produces:
         - text/plain
@@ -530,7 +530,7 @@ paths:
         - name: text
           in: body
           required: true
-          description: 代码文件text格式
+          description: The code file is in text format
           schema:
             type: string
       summary: 上传ULB文件
@@ -548,7 +548,7 @@ paths:
       security:
         - Authorization: []
         - access_token: []
-      summary: 删除指定的ULB文件
+      summary: Delete the specified ULB file
       description: ""
       responses:
         204:
@@ -562,10 +562,10 @@ paths:
       security:
         - Authorization: []
         - access_token: []
-      summary: 编译固件
+      summary: Compile the firmware
       description: |
-        系统会现查找是否存在已经编译好的固件，如果没有，则开始一个编译任务。因此会先返回`202 Accepted`, 当完成后会返回`201 Created`。
-        > 重复请求可以查询编译状态
+        The system will find whether there is already compiled firmware, if not, then start a compiled task. So it will first return `202 Accepted`, when compiled completed will return` 201 Created`.
+        > Duplicate requests can query the compiled state
       responses:
         200:
           description: OK
@@ -591,20 +591,20 @@ paths:
           in: body
           required: true
           description: |
-            支持三种github链接
-            - 主干`https://github.com/awong1900/Wio_Sample_Project`
-            - 分支`https://github.com/awong1900/Wio_Sample_Project/tree/dev`
-            - 标签`https://github.com/awong1900/Wio_Sample_Project/tree/v0.2.0`
+            Three github links are supported
+            - Master`https://github.com/awong1900/Wio_Sample_Project`
+            - Branch`https://github.com/awong1900/Wio_Sample_Project/tree/dev`
+            - Tag`https://github.com/awong1900/Wio_Sample_Project/tree/v0.2.0`
           schema:
             type: object
             properties:
               github_url:
                 type: string
-                description: 需要导入的WIO项目的github链接
-      summary: 导入WIO固件项目
+                description: You need to import the github link for the WIO project
+      summary: Import the WIO firmware project
       description: |
-        由于导入过程需要一些时间，API会先响应`202`。直到完成导入，响应`201`.
-        > 可以通过GET方法获得响应状态
+        Since the import process takes some time, the API will first respond to `202`. Until the import is complete, respond to `201`.
+        > The response state can be obtained by the `GET` method
       responses:
         202:
           description: Accepted
@@ -616,7 +616,7 @@ paths:
       security:
         - Authorization: []
         - access_token: []
-      summary: 获得固件项目导入状态
+      summary: Get the firmware import status
       description: ""
       responses:
         200:
@@ -629,7 +629,7 @@ paths:
       security:
         - Authorization: []
         - access_token: []
-      summary: 同步GitHub最新的固件项目文件
+      summary: Synchronize GitHub's latest firmware project
       description: ""
       responses:
         202:
@@ -648,7 +648,7 @@ paths:
       parameters:
         - name: format
           in: query
-          description: 定义输出的格式，`zipball`(default)|`tarball`
+          description: Define the format of the output, `zipball`(default)|`tarball`
           required: false
           type: string
       responses:
@@ -658,7 +658,7 @@ paths:
     get:
       tags:
         - misellaneous
-      summary: 输出WIO支持的驱动列表
+      summary: Output WIO Supported driver list
       description: ""
       responses:
         200:
@@ -724,7 +724,7 @@ paths:
     get:
       tags:
         - misellaneous
-      summary: 输出WIO支持的设备型号列表
+      summary: Outputs a list of device models supported by WIO
       description: ""
       responses:
         200:
@@ -827,8 +827,8 @@ paths:
       security:
         - Authorization: []
         - access_token: []
-      summary: 测试编译用户自开发模块驱动
-      description: 用户可为第三方模块编写驱动，参考[Wio v1.0驱动开发指南](https://github.com/Seeed-Studio/Wio_Link/wiki/How-to-write-module-driver-for-Wio-Link%3F)。编写完成后，使用此API测试驱动是否正常工作。此API接收驱动源代码，检查源代码正确性，并自动创建一个固件以供用户OTA到硬件进行测试。
+      summary: The test for compiles the user-developed module driver
+      description: Users can write a driver for third-party modules, refer to [Wio v1.0 Driver Development Guide] (https://github.com/Seeed-Studio/Wio_Link/wiki/How-to-write-module-driver-for-Wio-Link%3F). After writing, use this API to test whether the driver is working properly. This API receives the driver source code, checks the source code for correctness, and automatically creates a firmware for the user to test the OTA to the hardware.
       consumes:
         - application/json
       parameters:
