@@ -19,16 +19,26 @@ info:
         https://wio.seeed.io/v2
         https://wio.forkthings.com/v2 (test)
 
-    ## Token
+    ## 认证
     每个请求都需要带上认证信息，有两种方式携带认证信息。
 
     - 在`Header`添加`Authorization`，例如：
 
-        Authorization: token 313be000160b425baf933d47e12b1e9e
+         curl -H "Authorization: token YOUR-TOKEN" https://wio.seeed.io/v2
 
     - 在请求参数中添加`access_token`，例如：
 
-        https://wio.seeed.io/v2/user?access_token=313be000160b425baf933d47e12b1e9e
+        curl https://wio.seeed.io/v2?access_token=YOUR-TOKEN
+
+    ## 请求方法
+    Standard HTTP verbs to indicate intent of a request:
+
+    Verbs | Description
+    ---|---
+    GET | Retrieve a resource or a collection of resources
+    POST | Create a resource
+    PATCH | Modify a resource
+    PUT | Set a resource
 
     ## 响应码
     API完全遵循HTTP 状态码协议规定，不同响应码：
@@ -39,7 +49,8 @@ info:
     201 | Created，资源创建成功
     202 | Accepted，请求已接受，后台服务正在处理
     302 | Retry，重定向
-    400 | Error，出现错误，会带上错误消息
+    400 | Bad Request，出现错误，会带上错误消息
+    401 | Unauthorized
     403 | Forbidden，没有访问资源的权限
     404 | Not Found，没有发现资源
     405 | Method Not Allowed
@@ -57,7 +68,8 @@ info:
 schemes:
   - https
 # host: localhost:16080  # local test
-host: wio.forkthings.com
+# host: wio.seeed.io/v2  # product
+host: wio.forkthings.com  # pre test
 basePath: /v2
 consumes:
   - application/json
@@ -881,8 +893,8 @@ definitions:
   timestamp:
     type: string
     format: date-time
-    description: ISO 8601/RFC3339 formatted DateTime
-    example: 2016-11-22T02:25:01Z
+    description: UTC and formatted as ISO8601
+    example: 2016-12-28T12:05:05Z
   # errorMessage:
   #   type: object
   #   properties:
@@ -893,30 +905,24 @@ definitions:
     properties:
       user_id:
         type: string
+        example: mbrXAWhtKocpgb5mp4XVZb7hz0x2
       created_at:
         $ref: '#/definitions/timestamp'
-    example:
-      user_id: mbrXAWhtKocpgb5mp4XVZb7hz0x2
-      created_at: 2016-11-21T02:25:01Z
   userToken:
     type: object
     properties:
       token:
         type: string
+        example: mbrXAWhtKocpgb5mp4XVZb7hz0x2
       user_id:
         type: string
+        example: Mev326aO4gODGY0exYt4bmDmX7u2
       expire:
         $ref: '#/definitions/timestamp'
       created_at:
         $ref: '#/definitions/timestamp'
       updated_at:
         $ref: '#/definitions/timestamp'
-    example:
-      user_id: mbrXAWhtKocpgb5mp4XVZb7hz0x2
-      token: Mev326aO4gODGY0exYt4bmDmX7u2
-      expire: 2016-11-22T02:25:01Z
-      created_at: 2016-11-21T02:25:01Z
-      updated_at: 2016-11-21T02:25:01Z
   newThing:
     type: object
     required:
@@ -927,57 +933,55 @@ definitions:
         enum:
           - Wio Link v1.0
           - Wio Node v1.0
-        description: "节点设备型号"
+        description: "thing board model"
+        example: Wio Link v1.0
       name:
         type: string
-        description: "节点设备名字"
-    example:
-      board: Wio Link v1.0
-      name: wio01
+        description: "thing name"
+        example: wio01
   thing:
     type: object
     properties:
       thing_id:
         type: string
+        example: 12a9d0922562456a9fdf0b55c20b29ea
       user_id:
         type: string
+        example: 160979
       firmware_id:
         type: string
+        example: ""
       key:
         type: string
+        example: 6eb8cccd6a7b48a5ba842c3f22683cea
       name:
         type: string
+        example: wio01
       board:
         type: string
+        example: WioLink v1.0
       online:
         type: boolean
+        example: false
       pp_id:
         type: string
+        example: ""
       page_url:
         type: string
+        example: http://localhost:16080/v2/things/12a9d0922562456a9fdf0b55c20b29ea/page
       created_at:
         $ref: '#/definitions/timestamp'
       updated_at:
         $ref: '#/definitions/timestamp'
-    example:
-      thing_id: 12a9d0922562456a9fdf0b55c20b29ea
-      user_id: 160979
-      firmware_id: ""
-      key: 6eb8cccd6a7b48a5ba842c3f22683cea
-      name: wio01
-      board: WioLink v1.0
-      online: false
-      pp_id: ""
-      page_url: http://localhost:16080/v2/things/12a9d0922562456a9fdf0b55c20b29ea/page
-      created_at: 2016-11-21T03:27:04Z
-      updated_at: 2016-11-21T03:27:04Z
   ota:
     type: object
     properties:
       thing_id:
         type: string
+        example: 049f867bad4f4f0db302df7798cd94e6
       firmware_id:
         type: string
+        example: ad144ec3505641e29555e7de25aeaa08
       ota_at:
         $ref: '#/definitions/timestamp'
       status:
@@ -989,104 +993,83 @@ definitions:
           - processing
           - succeeded
           - failed
+        example: pending
       status_text:
         type: string
+        example: waiting to be scheduled
       updated_at:
         $ref: '#/definitions/timestamp'
-    example:
-      thing_id: 049f867bad4f4f0db302df7798cd94e6
-      firmware_id: ad144ec3505641e29555e7de25aeaa08
-      ota_at: 2016-12-20T00:00:00Z
-      status: pending
-      status_text: waiting to be scheduled
-      updated_at: 2016-11-21T10:11:28Z
   newOta:
     type: object
     properties:
       firmware_id:
         type: string
+        example: ad144ec3505641e29555e7de25aeaa08
       ota_at:
         $ref: '#/definitions/timestamp'
     required:
       - firmware_id
-    example:
-      firmware_id: ad144ec3505641e29555e7de25aeaa08
-      ota_at: 2016-12-20T00:00:00Z
   updateOta:
     type: object
     properties:
       firmware_id:
         type: string
+        example: ad144ec3505641e29555e7de25aeaa08
       ota_at:
         $ref: '#/definitions/timestamp'
-    example:
-      firmware_id: ad144ec3505641e29555e7de25aeaa08
-      ota_at: 2016-12-20T00:00:00Z
   firmware:
     type: object
     properties:
       firmware_id:
         type: string
+        example: a6c91046291049e9a9357dd535c91598
       user_id:
         type: string
+        example: 160979
       name:
         type: string
+        example: Hello-World
       desc:
         type: string
+        example: First firmware
       firmeare_type:
         type: string
+        example: flexible
       fixed_url:
         type: string
+        example: ""
       bin_url:
         type: string
+        example: ""
       size:
         type: string
+        example: 120000
       sha:
         type: string
+        example: ""
       config:
         $ref: "#/definitions/config"
       created_at:
         $ref: '#/definitions/timestamp'
       updated_at:
         $ref: '#/definitions/timestamp'
-    example:
-      firmware_id: a6c91046291049e9a9357dd535c91598
-      user_id: 160979
-      name: Hello-World
-      desc: First firmware
-      firmware_type: flexible
-      fixed_url: ""
-      bin_url: ""
-      size: 120000
-      sha: ""
-      config:
-        board_name: Wio Link v1.0
-        connections: []
-      created_at: 2016-11-21T03:41:52Z
-      updated_at: 2016-11-21T03:41:52Z
   newFirmware:
     type: object
     properties:
       name:
         type: string
+        example: myWioFirmware
       desc:
         type: string
+        example: First firmware
       config:
         $ref: "#/definitions/config"
-    example:
-      name: myWioFirmware
-      desc: First firmware
-      config: {
-      	board_name: Wio Link v1.0,
-      	connections: [
-      	  {sku: 101020019-ffff, port: D0}
-        ]
-      }
   config:
     type: object
     properties:
       board_name:
         type: string
+        example:  Wio Link v1.0
       connections:
         type: array
         items:
@@ -1094,24 +1077,18 @@ definitions:
     required:
       - board_name
       - connections
-    example:
-      board_name: Wio Link v1.0
-      connections: [
-        {sku: 101020019-ffff, port: D0}
-      ]
   connection:
     type: object
     properties:
       sku:
         type: string
+        example: 101020019-ffff
       port:
         type: string
+        example: D0
     required:
       - sku
       - port
-    example:
-      sku: 101020019-ffff
-      port: D0
   # newConfig:
   #   type: object
   #   properties:
@@ -1164,9 +1141,6 @@ definitions:
         $ref: '#/definitions/timestamp'
       updated_at:
         $ref: '#/definitions/timestamp'
-    example:
-      sku: 120599876
-      port: D0
   binState:
     type: object
     properties:
@@ -1176,12 +1150,11 @@ definitions:
           - building
           - success
           - failure
+        example: building
       status_text:
         type: string
     required:
       - status
-    example:
-      status: building
   bin: # TODO(ten), fix later
     type: object
     properties:
@@ -1192,70 +1165,48 @@ definitions:
     properties:
       firmware_id:
         type: string
+        example: ad144ec3505641e29555e7de25aeaa08
       github_url:
         type: string
+        example: https://github.com/awong1900/Wio_Sample_Project
       status:
         type: string
         enum:
           - pending
           - importing
           # TODO(ten), more status
+        example: pending
       status_text:
         type: string
+        example: waiting import...
       created_at:
         $ref: '#/definitions/timestamp'
       updated_at:
         $ref: '#/definitions/timestamp'
-    example:
-      firmware_id: ad144ec3505641e29555e7de25aeaa08
-      github_url: https://github.com/awong1900/Wio_Sample_Project
-      status: pending
-      status_text: waiting import...
-      created_at: 2016-11-22T06:56:12Z
-      updated_at: 2016-11-22T06:56:12Z
   driverSrc:
     type: object
     properties:
       name:
         type: string
+        example: driver_x.h
       content:
         type: string
-    example:
-      name: driver_x.h
-      content: "here is the source code"
+        example: here is the source code
   driverObject:
     type: object
     properties:
       user_id:
         type: string
+        example: 2349724074207
       sku:
         type: string
+        example: 12864565
       firmware_id:
         type: string
+        example: ad144ec3505641e29555e7de25aeaa08
       created_at:
         $ref: '#/definitions/timestamp'
       updated_at:
         $ref: '#/definitions/timestamp'
       firmware:
         $ref: '#/definitions/firmware'
-    example:
-      user_id: 2349724074207
-      sku: 12864565
-      firmware_id: ad144ec3505641e29555e7de25aeaa08
-      created_at: 2016-11-25T16:56:12Z
-      updated_at: 2016-11-25T16:56:13Z
-      firmware:
-        firmware_id: a6c91046291049e9a9357dd535c91598
-        user_id: 160979
-        name: Hello-World
-        desc: First firmware
-        firmware_type: flexible
-        fixed_url: ""
-        bin_url: ""
-        size: 120000
-        sha: ""
-        config:
-          board_name: Wio Link v1.0
-          connections: []
-        created_at: 2016-11-21T03:41:52Z
-        updated_at: 2016-11-21T03:41:52Z

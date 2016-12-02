@@ -1,0 +1,1660 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "v2",
+        "title": "Wio API v2",
+        "description": "Wio IOT platform is a networking application platform, the real WOT products. The Restful API helps users to complete product definition and deployment.\n\n## Online test\n1. Get access token from Seeed SSO page:https://wio.seeed.io/login\n\n2. Click 'Authorize' on the upper right, then enter the access token\n\n3. Now, you can test APIs on this page\n\n## Root Endpoint\n\n    https://wio.seeed.io/v2\n    https://wio.forkthings.com/v2 (test)\n\n## Authentication\nThere are two ways to authenticate through Wio API v2. Requests that require authentication will return `403 Forbidden`.\n\n- Access Token (sent in a header)\n\n    curl -H \"Authorization: token YOUR-TOKEN\" https://wio.seeed.io/v2\n\n- Access Token (sent in a parameter)\n\n    curl https://wio.seeed.io/v2?access_token=YOUR-TOKEN\n\n## HTTP Verbs\nStandard HTTP verbs to indicate intent of a request:\n\nVerbs | Description\n---|---\nGET | Retrieve a resource or a collection of resources\nPOST | Create a resource\nPATCH | Modify a resource\nPUT | Set a resource\n\n## HTTP Status Codes\nHTTP status codes to indicate success or failure of a request.\n\nCodes | Description\n---|---\n200 | OK\n201 | Created\n202 | Accepted\n302 | Retry\n400 | Bad Request\n401 | Unauthorized\n403 | Forbidden\n404 | Not Found\n405 | Method Not Allowed\n500 | Internal Server Error\n\n## Errors\nAll 400 series errors (400, 401, 403, etc) will be returned with a JSON object in the body and a `application/json` content type.\n\n    {\n        \"error\": \"Invalid user\"\n    }\n\n500 series error codes (500, 501, 502, etc) do not return JSON bodies.\n\n## Timestamps\nTimestamps are in [UTC](http://en.wikipedia.org/wiki/Coordinated_Universal_Time) and formatted as [ISO8601](http://en.wikipedia.org/wiki/ISO_8601).\n\nSuch as`2016-12-28T12:05:05Z`\n"
+    },
+    "schemes": [
+        "https"
+    ],
+    "host": "wio.forkthings.com",
+    "basePath": "/v2",
+    "consumes": [
+        "application/json",
+        "text/plain"
+    ],
+    "produces": [
+        "application/json",
+        "text/plain",
+        "text/html"
+    ],
+    "tags": [
+        {
+            "name": "users"
+        },
+        {
+            "name": "things"
+        },
+        {
+            "name": "firmwares"
+        },
+        {
+            "name": "misellaneous"
+        }
+    ],
+    "paths": {
+        "/user": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "summary": "Get the authenticated user",
+                "description": "According to the token to find the current user, if the first landing, the token is passed to the SSO system, authentication is successful, the user stored to the current system.\n",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/user"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "users"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "summary": "Get the authenticated user",
+                "description": "Also delete all thing and firmware datas of the user, please be careful to use.\n",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                }
+            }
+        },
+        "/users": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "summary": "获取所有用户ID",
+                "description": "> Only the authenticated user is the system administrator, will return all user information.\n",
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/page"
+                    },
+                    {
+                        "$ref": "#/parameters/per_page"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "users": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/user"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{user_id}": {
+            "parameters": [
+                {
+                    "$ref": "#/parameters/user_id"
+                }
+            ],
+            "delete": {
+                "tags": [
+                    "users"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "summary": "Delete a single user",
+                "description": "Requires this user or administrator permissions",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                }
+            }
+        },
+        "/user/token": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "summary": "Get the authenticated user token information",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/userToken"
+                        }
+                    }
+                }
+            }
+        },
+        "/user/{user_id}/token": {
+            "get": {
+                "tags": [
+                    "users"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/user_id"
+                    }
+                ],
+                "summary": "Get the single user token information",
+                "description": "Requires this user or administrator permissions",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/userToken"
+                        }
+                    }
+                }
+            }
+        },
+        "/things": {
+            "get": {
+                "tags": [
+                    "things"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/page"
+                    },
+                    {
+                        "$ref": "#/parameters/per_page"
+                    }
+                ],
+                "summary": "List things that are accessible to the authenticated user.",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "things": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/thing"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "things"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "summary": "Create a new thing for the authenticated user.",
+                "description": "",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "thingParas",
+                        "in": "body",
+                        "description": "Input",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/newThing"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/thing"
+                        }
+                    }
+                }
+            }
+        },
+        "/things/{thing_id}": {
+            "parameters": [
+                {
+                    "$ref": "#/parameters/thing_id"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "things"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "summary": "Get a thing",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/thing"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "things"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "newThing",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/newThing"
+                        }
+                    }
+                ],
+                "summary": "Update a thing",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/thing"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "things"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "summary": "Delete a thing",
+                "description": "",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                }
+            }
+        },
+        "/things/{thing_id}/page": {
+            "parameters": [
+                {
+                    "$ref": "#/parameters/thing_id"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "things"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "summary": "Get a thing APIs page",
+                "description": "",
+                "produces": [
+                    "text/html"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK, 通过html页面展示节点可用的Web API操作。",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/things/{thing_id}/ota": {
+            "parameters": [
+                {
+                    "$ref": "#/parameters/thing_id"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "things"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "summary": "Get the OTA info for the authenticated user.",
+                "description": "Display the state and date-time of OTA.\n",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ota"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "things"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "newOta",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/newOta"
+                        }
+                    }
+                ],
+                "summary": "Upgrade the thing device firmware immediately or timed upgrade.",
+                "description": "- when `ota_at` field is null，immediately upgrade\n- when `ota_at` field is valid date-time，timed upgrade\n",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ota"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "things"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "newOta",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/updateOta"
+                        }
+                    }
+                ],
+                "summary": "修改OTA设置",
+                "description": "You can modify the OTA time, the firmware version, or cancel the upgrade.\n",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/ota"
+                        }
+                    }
+                }
+            }
+        },
+        "/firmwares": {
+            "get": {
+                "tags": [
+                    "firmwares"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/parameters/page"
+                    },
+                    {
+                        "$ref": "#/parameters/per_page"
+                    }
+                ],
+                "summary": "Gets all the firmware items for the current user",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "firmwares": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/firmware"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "firmwares"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "firmwareParas",
+                        "in": "body",
+                        "description": "Input",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/newFirmware"
+                        }
+                    }
+                ],
+                "summary": "Create a firmware",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/firmware"
+                        }
+                    }
+                }
+            }
+        },
+        "/firmwares/{firmware_id}": {
+            "parameters": [
+                {
+                    "$ref": "#/parameters/firmware_id"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "firmwares"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "summary": "Get a firmware",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/firmware"
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "firmwares"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "firmwareParas",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/newFirmware"
+                        }
+                    }
+                ],
+                "summary": "Update a firmware",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/firmware"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "firmwares"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "summary": "Delete a firmware",
+                "description": "",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                }
+            }
+        },
+        "/firmwares/{firmware_id}/ulbs": {
+            "parameters": [
+                {
+                    "$ref": "#/parameters/firmware_id"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "firmwares"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "summary": "Get all user program files (ULB) for the current user",
+                "description": "",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "title": "response",
+                            "properties": {
+                                "ulbs": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/ulb"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/firmwares/{firmware_id}/ulbs/{path_name}": {
+            "parameters": [
+                {
+                    "$ref": "#/parameters/firmware_id"
+                },
+                {
+                    "name": "path_name",
+                    "description": "Ulb file relative path, such as `/foo/bar.cpp`\n",
+                    "in": "path",
+                    "type": "string",
+                    "required": true
+                }
+            ],
+            "get": {
+                "tags": [
+                    "firmwares"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "format",
+                        "description": "Definition of the data format, `raw` |` base64`, directly return text or encoded into base64 format.\n",
+                        "in": "query",
+                        "type": "string",
+                        "required": false
+                    }
+                ],
+                "summary": "Gets the specified ULB file",
+                "description": "",
+                "produces": [
+                    "text/plain",
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "firmwares"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "consumes": [
+                    "text/plain"
+                ],
+                "parameters": [
+                    {
+                        "name": "text",
+                        "in": "body",
+                        "required": true,
+                        "description": "The code file is in text format",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "summary": "上传ULB文件",
+                "description": "",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/ulb"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "firmwares"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "summary": "Delete the specified ULB file",
+                "description": "",
+                "responses": {
+                    "204": {
+                        "description": "No Content"
+                    }
+                }
+            }
+        },
+        "/firmwares/{firmware_id}/bin": {
+            "parameters": [
+                {
+                    "$ref": "#/parameters/firmware_id"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "firmwares"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "summary": "Compile the firmware",
+                "description": "The system will find whether there is already compiled firmware, if not, then start a compiled task. So it will first return `202 Accepted`, when compiled completed will return` 201 Created`.\n> Duplicate requests can query the compiled state\n",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/bin"
+                        }
+                    },
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "$ref": "#/definitions/binState"
+                        }
+                    }
+                }
+            }
+        },
+        "/firmwares/{firmware_id}/import": {
+            "parameters": [
+                {
+                    "$ref": "#/parameters/firmware_id"
+                }
+            ],
+            "put": {
+                "tags": [
+                    "firmwares"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "description": "Three github links are supported\n- Master`https://github.com/awong1900/Wio_Sample_Project`\n- Branch`https://github.com/awong1900/Wio_Sample_Project/tree/dev`\n- Tag`https://github.com/awong1900/Wio_Sample_Project/tree/v0.2.0`\n",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "github_url": {
+                                    "type": "string",
+                                    "description": "You need to import the github link for the WIO project"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "summary": "Import the WIO firmware project",
+                "description": "Since the import process takes some time, the API will first respond to `202`. Until the import is complete, respond to `201`.\n> The response state can be obtained by the `GET` method\n",
+                "responses": {
+                    "202": {
+                        "description": "Accepted",
+                        "schema": {
+                            "$ref": "#/definitions/firmwareImport"
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "firmwares"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "summary": "Get the firmware import status",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/firmwareImport"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "firmwares"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "summary": "Synchronize GitHub's latest firmware project",
+                "description": "",
+                "responses": {
+                    "202": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/firmwareImport"
+                        }
+                    }
+                }
+            }
+        },
+        "/firmwares/{firmware_id}/export": {
+            "parameters": [
+                {
+                    "$ref": "#/parameters/firmware_id"
+                }
+            ],
+            "get": {
+                "tags": [
+                    "firmwares"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "format",
+                        "in": "query",
+                        "description": "Define the format of the output, `zipball`(default)|`tarball`",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/drivers": {
+            "get": {
+                "tags": [
+                    "misellaneous"
+                ],
+                "summary": "Output WIO Supported driver list",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": {
+                                "drivers": [
+                                    {
+                                        "SKU": "105020005",
+                                        "ConstructArgList": [
+                                            "int pin"
+                                        ],
+                                        "Author": "SEEED",
+                                        "Writes": {
+                                            "write_onoff": {
+                                                "Arguments": [
+                                                    [
+                                                        "int",
+                                                        "onoff"
+                                                    ]
+                                                ]
+                                            }
+                                        },
+                                        "ClassName": "GroveEL",
+                                        "Events": {},
+                                        "Files": [
+                                            "grove_el_driver.h",
+                                            "grove_el_driver.cpp"
+                                        ],
+                                        "Description": "Grove - EL Driver is designed for driving EL Wires.It integrates a very small inverter to drive the EL Wire, so you can easily light up the EL Wire with just one single Grove cable.",
+                                        "AddedAt": 1443657600,
+                                        "HasPowerOffFunc": false,
+                                        "HasPowerOnFunc": false,
+                                        "InterfaceType": "GPIO",
+                                        "GroveName": "Grove-EL Driver",
+                                        "ImageURL": "https://raw.githubusercontent.com/Seeed-Studio/Grove_Drivers_for_Wio/static/images/grove-el-driver.jpg",
+                                        "CanGetLastError": false,
+                                        "HackGuideURL": "",
+                                        "WikiURL": "http://www.seeedstudio.com/wiki/Grove_-_EL_Driver",
+                                        "ClassFile": "grove_el_driver.h",
+                                        "Reads": {
+                                            "read_onoff_status": {
+                                                "Raw": [
+                                                    "int *onoff"
+                                                ],
+                                                "Returns": [
+                                                    [
+                                                        "int",
+                                                        "onoff"
+                                                    ]
+                                                ],
+                                                "Arguments": []
+                                            }
+                                        },
+                                        "NeedHack": false,
+                                        "HasEvent": false,
+                                        "IncludePath": "grove_drivers/grove_el_driver"
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/boards": {
+            "get": {
+                "tags": [
+                    "misellaneous"
+                ],
+                "summary": "Outputs a list of device models supported by WIO",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "examples": {
+                            "application/json": {
+                                "boards": [
+                                    {
+                                        "board_platform": "ESP8266",
+                                        "board_flash_spi_mode": "QIO",
+                                        "board_builtin": {
+                                            "FUNCTION_KEY": 0,
+                                            "STATUS_LED": 2,
+                                            "GROVE_POWER_SWITCH": 15
+                                        },
+                                        "interfaces": {
+                                            "UART0": {
+                                                "pintx": 1,
+                                                "pinrx": 3,
+                                                "type": "UART"
+                                            },
+                                            "D2": {
+                                                "type": "GPIO",
+                                                "pin": 13
+                                            },
+                                            "A0": {
+                                                "type": "ANALOG",
+                                                "pin": 17
+                                            },
+                                            "I2C0": {
+                                                "pinscl": 5,
+                                                "type": "I2C",
+                                                "pinsda": 4
+                                            },
+                                            "D0": {
+                                                "type": "GPIO",
+                                                "pin": 14
+                                            },
+                                            "D1": {
+                                                "type": "GPIO",
+                                                "pin": 12
+                                            }
+                                        },
+                                        "board_name": "Wio Link v1.0",
+                                        "board_firmware_dir": "firmware_esp",
+                                        "board_flash_map": 6,
+                                        "board_vendor": "seeedstudio",
+                                        "board_flash_spi_speed": 40
+                                    },
+                                    {
+                                        "board_platform": "ESP8266",
+                                        "board_flash_spi_mode": "QIO",
+                                        "board_builtin": {
+                                            "FUNCTION_KEY": 0,
+                                            "STATUS_LED": 2,
+                                            "GROVE_POWER_SWITCH": 15
+                                        },
+                                        "interfaces": {
+                                            "A0": {
+                                                "type": "ANALOG",
+                                                "pin": 17
+                                            },
+                                            "UART0": {
+                                                "pintx": 1,
+                                                "pinrx": 3,
+                                                "type": "UART"
+                                            },
+                                            "I2C0": {
+                                                "pinscl": 3,
+                                                "type": "I2C",
+                                                "pinsda": 1
+                                            },
+                                            "I2C1": {
+                                                "pinscl": 5,
+                                                "type": "I2C",
+                                                "pinsda": 4
+                                            },
+                                            "D0": {
+                                                "type": "GPIO",
+                                                "pin": 3
+                                            },
+                                            "D1": {
+                                                "type": "GPIO",
+                                                "pin": 5
+                                            }
+                                        },
+                                        "board_name": "Wio Node v1.0",
+                                        "board_firmware_dir": "firmware_esp",
+                                        "board_flash_map": 6,
+                                        "board_vendor": "seeedstudio",
+                                        "board_flash_spi_speed": 40
+                                    }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/driver-test": {
+            "post": {
+                "tags": [
+                    "misellaneous"
+                ],
+                "security": [
+                    {
+                        "Authorization": []
+                    },
+                    {
+                        "access_token": []
+                    }
+                ],
+                "summary": "The test for compiles the user-developed module driver",
+                "description": "Users can write a driver for third-party modules, refer to [Wio v1.0 Driver Development Guide] (https://github.com/Seeed-Studio/Wio_Link/wiki/How-to-write-module-driver-for-Wio-Link%3F). After writing, use this API to test whether the driver is working properly. This API receives the driver source code, checks the source code for correctness, and automatically creates a firmware for the user to test the OTA to the hardware.",
+                "consumes": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "driverSrcs",
+                        "in": "body",
+                        "description": "The list of driver source code.",
+                        "required": true,
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/driverSrc"
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Passed the static check and created a firmware project.",
+                        "schema": {
+                            "$ref": "#/definitions/driverObject"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "Authorization": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header",
+            "description": "Send authorizatin on the header. Beginning with `token`, and blank then token, such as `token YOUR-TOKEN`.\n"
+        },
+        "access_token": {
+            "type": "apiKey",
+            "name": "access_token",
+            "in": "query",
+            "description": "Send authorizatin on the query. Enter token on the value field.\n"
+        }
+    },
+    "parameters": {
+        "user_id": {
+            "name": "user_id",
+            "in": "path",
+            "description": "ID of user",
+            "required": true,
+            "type": "string"
+        },
+        "thing_id": {
+            "name": "thing_id",
+            "in": "path",
+            "description": "ID of thing",
+            "required": true,
+            "type": "string"
+        },
+        "firmware_id": {
+            "name": "firmware_id",
+            "in": "path",
+            "description": "ID if firmware",
+            "required": true,
+            "type": "string"
+        },
+        "page": {
+            "name": "page",
+            "in": "query",
+            "description": "which page do you want",
+            "default": 1,
+            "required": false,
+            "type": "integer"
+        },
+        "per_page": {
+            "name": "per_page",
+            "in": "query",
+            "description": "how many items on one page",
+            "default": 20,
+            "minimum": 1,
+            "maximum": 100,
+            "type": "integer",
+            "required": false
+        }
+    },
+    "definitions": {
+        "timestamp": {
+            "type": "string",
+            "format": "date-time",
+            "description": "UTC and formatted as ISO8601",
+            "example": "2016-12-28T12:05:05.000Z"
+        },
+        "user": {
+            "type": "object",
+            "properties": {
+                "user_id": {
+                    "type": "string",
+                    "example": "mbrXAWhtKocpgb5mp4XVZb7hz0x2"
+                },
+                "created_at": {
+                    "$ref": "#/definitions/timestamp"
+                }
+            }
+        },
+        "userToken": {
+            "type": "object",
+            "properties": {
+                "token": {
+                    "type": "string",
+                    "example": "mbrXAWhtKocpgb5mp4XVZb7hz0x2"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": "Mev326aO4gODGY0exYt4bmDmX7u2"
+                },
+                "expire": {
+                    "$ref": "#/definitions/timestamp"
+                },
+                "created_at": {
+                    "$ref": "#/definitions/timestamp"
+                },
+                "updated_at": {
+                    "$ref": "#/definitions/timestamp"
+                }
+            }
+        },
+        "newThing": {
+            "type": "object",
+            "required": [
+                "board"
+            ],
+            "properties": {
+                "board": {
+                    "type": "string",
+                    "enum": [
+                        "Wio Link v1.0",
+                        "Wio Node v1.0"
+                    ],
+                    "description": "thing board model",
+                    "example": "Wio Link v1.0"
+                },
+                "name": {
+                    "type": "string",
+                    "description": "thing name",
+                    "example": "wio01"
+                }
+            }
+        },
+        "thing": {
+            "type": "object",
+            "properties": {
+                "thing_id": {
+                    "type": "string",
+                    "example": "12a9d0922562456a9fdf0b55c20b29ea"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": 160979
+                },
+                "firmware_id": {
+                    "type": "string",
+                    "example": ""
+                },
+                "key": {
+                    "type": "string",
+                    "example": "6eb8cccd6a7b48a5ba842c3f22683cea"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "wio01"
+                },
+                "board": {
+                    "type": "string",
+                    "example": "WioLink v1.0"
+                },
+                "online": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "pp_id": {
+                    "type": "string",
+                    "example": ""
+                },
+                "page_url": {
+                    "type": "string",
+                    "example": "http://localhost:16080/v2/things/12a9d0922562456a9fdf0b55c20b29ea/page"
+                },
+                "created_at": {
+                    "$ref": "#/definitions/timestamp"
+                },
+                "updated_at": {
+                    "$ref": "#/definitions/timestamp"
+                }
+            }
+        },
+        "ota": {
+            "type": "object",
+            "properties": {
+                "thing_id": {
+                    "type": "string",
+                    "example": "049f867bad4f4f0db302df7798cd94e6"
+                },
+                "firmware_id": {
+                    "type": "string",
+                    "example": "ad144ec3505641e29555e7de25aeaa08"
+                },
+                "ota_at": {
+                    "$ref": "#/definitions/timestamp"
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "",
+                        "pending",
+                        "queue",
+                        "processing",
+                        "succeeded",
+                        "failed"
+                    ],
+                    "example": "pending"
+                },
+                "status_text": {
+                    "type": "string",
+                    "example": "waiting to be scheduled"
+                },
+                "updated_at": {
+                    "$ref": "#/definitions/timestamp"
+                }
+            }
+        },
+        "newOta": {
+            "type": "object",
+            "properties": {
+                "firmware_id": {
+                    "type": "string",
+                    "example": "ad144ec3505641e29555e7de25aeaa08"
+                },
+                "ota_at": {
+                    "$ref": "#/definitions/timestamp"
+                }
+            },
+            "required": [
+                "firmware_id"
+            ]
+        },
+        "updateOta": {
+            "type": "object",
+            "properties": {
+                "firmware_id": {
+                    "type": "string",
+                    "example": "ad144ec3505641e29555e7de25aeaa08"
+                },
+                "ota_at": {
+                    "$ref": "#/definitions/timestamp"
+                }
+            }
+        },
+        "firmware": {
+            "type": "object",
+            "properties": {
+                "firmware_id": {
+                    "type": "string",
+                    "example": "a6c91046291049e9a9357dd535c91598"
+                },
+                "user_id": {
+                    "type": "string",
+                    "example": 160979
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Hello-World"
+                },
+                "desc": {
+                    "type": "string",
+                    "example": "First firmware"
+                },
+                "firmeare_type": {
+                    "type": "string",
+                    "example": "flexible"
+                },
+                "fixed_url": {
+                    "type": "string",
+                    "example": ""
+                },
+                "bin_url": {
+                    "type": "string",
+                    "example": ""
+                },
+                "size": {
+                    "type": "string",
+                    "example": 120000
+                },
+                "sha": {
+                    "type": "string",
+                    "example": ""
+                },
+                "config": {
+                    "$ref": "#/definitions/config"
+                },
+                "created_at": {
+                    "$ref": "#/definitions/timestamp"
+                },
+                "updated_at": {
+                    "$ref": "#/definitions/timestamp"
+                }
+            }
+        },
+        "newFirmware": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "myWioFirmware"
+                },
+                "desc": {
+                    "type": "string",
+                    "example": "First firmware"
+                },
+                "config": {
+                    "$ref": "#/definitions/config"
+                }
+            }
+        },
+        "config": {
+            "type": "object",
+            "properties": {
+                "board_name": {
+                    "type": "string",
+                    "example": "Wio Link v1.0"
+                },
+                "connections": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/connection"
+                    }
+                }
+            },
+            "required": [
+                "board_name",
+                "connections"
+            ]
+        },
+        "connection": {
+            "type": "object",
+            "properties": {
+                "sku": {
+                    "type": "string",
+                    "example": "101020019-ffff"
+                },
+                "port": {
+                    "type": "string",
+                    "example": "D0"
+                }
+            },
+            "required": [
+                "sku",
+                "port"
+            ]
+        },
+        "ulb": {
+            "type": "object",
+            "properties": {
+                "firmware_id": {
+                    "type": "string"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "content": {
+                    "type": "string"
+                },
+                "encoding": {
+                    "type": "string",
+                    "enum": [
+                        "plain",
+                        "base64"
+                    ]
+                },
+                "size": {
+                    "type": "integer"
+                },
+                "sha": {
+                    "type": "string"
+                },
+                "created_at": {
+                    "$ref": "#/definitions/timestamp"
+                },
+                "updated_at": {
+                    "$ref": "#/definitions/timestamp"
+                }
+            }
+        },
+        "binState": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "building",
+                        "success",
+                        "failure"
+                    ],
+                    "example": "building"
+                },
+                "status_text": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "status"
+            ]
+        },
+        "bin": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "string"
+                }
+            }
+        },
+        "firmwareImport": {
+            "type": "object",
+            "properties": {
+                "firmware_id": {
+                    "type": "string",
+                    "example": "ad144ec3505641e29555e7de25aeaa08"
+                },
+                "github_url": {
+                    "type": "string",
+                    "example": "https://github.com/awong1900/Wio_Sample_Project"
+                },
+                "status": {
+                    "type": "string",
+                    "enum": [
+                        "pending",
+                        "importing"
+                    ],
+                    "example": "pending"
+                },
+                "status_text": {
+                    "type": "string",
+                    "example": "waiting import..."
+                },
+                "created_at": {
+                    "$ref": "#/definitions/timestamp"
+                },
+                "updated_at": {
+                    "$ref": "#/definitions/timestamp"
+                }
+            }
+        },
+        "driverSrc": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "driver_x.h"
+                },
+                "content": {
+                    "type": "string",
+                    "example": "here is the source code"
+                }
+            }
+        },
+        "driverObject": {
+            "type": "object",
+            "properties": {
+                "user_id": {
+                    "type": "string",
+                    "example": 2349724074207
+                },
+                "sku": {
+                    "type": "string",
+                    "example": 12864565
+                },
+                "firmware_id": {
+                    "type": "string",
+                    "example": "ad144ec3505641e29555e7de25aeaa08"
+                },
+                "created_at": {
+                    "$ref": "#/definitions/timestamp"
+                },
+                "updated_at": {
+                    "$ref": "#/definitions/timestamp"
+                },
+                "firmware": {
+                    "$ref": "#/definitions/firmware"
+                }
+            }
+        }
+    }
+}

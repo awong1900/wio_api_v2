@@ -3,7 +3,7 @@
     "info": {
         "version": "v2",
         "title": "Wio API v2",
-        "description": "Wio IOT 平台是一款物联网应用平台，真正的WOT产品。Restful API帮助用户完成产品定义和部署。\n\n## 在线测试\n1. 从Seeed SSO获得token，https://wio.seeed.io/login\n\n2. 点击右上角`Authorize`填写认证token\n\n3. 现在就可以使用Wio API了\n\n## 端点\nAPI请求的端点为\n\n    https://wio.seeed.io/v2\n    https://wio.forkthings.com/v2 (test)\n\n## Token\n每个请求都需要带上认证信息，有两种方式携带认证信息。\n\n- 在`Header`添加`Authorization`，例如：\n\n    Authorization: token 313be000160b425baf933d47e12b1e9e\n\n- 在请求参数中添加`access_token`，例如：\n\n    https://wio.seeed.io/v2/user?access_token=313be000160b425baf933d47e12b1e9e\n\n## 响应码\nAPI完全遵循HTTP 状态码协议规定，不同响应码：\n\n状态码 | 描述\n---|---\n200 | OK，正常响应\n201 | Created，资源创建成功\n202 | Accepted，请求已接受，后台服务正在处理\n302 | Retry，重定向\n400 | Error，出现错误，会带上错误消息\n403 | Forbidden，没有访问资源的权限\n404 | Not Found，没有发现资源\n405 | Method Not Allowed\n500 | Internal Server Error，系统错误，服务器停止\n\n## 错误消息\n`status code：400`\n\n    {\n      \"error\": \"Invalid user\",\n    }\n\n## 时间格式\n时间采用`ISO8601`格式。如`YYYY-MM-DDTHH:MM:SSZ`\n"
+        "description": "Wio IOT 平台是一款物联网应用平台，真正的WOT产品。Restful API帮助用户完成产品定义和部署。\n\n## 在线测试\n1. 从Seeed SSO获得token，https://wio.seeed.io/login\n\n2. 点击右上角`Authorize`填写认证token\n\n3. 现在就可以使用Wio API了\n\n## 端点\nAPI请求的端点为\n\n    https://wio.seeed.io/v2\n    https://wio.forkthings.com/v2 (test)\n\n## 认证\n每个请求都需要带上认证信息，有两种方式携带认证信息。\n\n- 在`Header`添加`Authorization`，例如：\n\n     curl -H \"Authorization: token YOUR-TOKEN\" https://wio.seeed.io/v2\n\n- 在请求参数中添加`access_token`，例如：\n\n    curl https://wio.seeed.io/v2?access_token=YOUR-TOKEN\n\n## 请求方法\nStandard HTTP verbs to indicate intent of a request:\n\nVerbs | Description\n---|---\nGET | Retrieve a resource or a collection of resources\nPOST | Create a resource\nPATCH | Modify a resource\nPUT | Set a resource\n\n## 响应码\nAPI完全遵循HTTP 状态码协议规定，不同响应码：\n\n状态码 | 描述\n---|---\n200 | OK，正常响应\n201 | Created，资源创建成功\n202 | Accepted，请求已接受，后台服务正在处理\n302 | Retry，重定向\n400 | Bad Request，出现错误，会带上错误消息\n401 | Unauthorized\n403 | Forbidden，没有访问资源的权限\n404 | Not Found，没有发现资源\n405 | Method Not Allowed\n500 | Internal Server Error，系统错误，服务器停止\n\n## 错误消息\n`status code：400`\n\n    {\n      \"error\": \"Invalid user\",\n    }\n\n## 时间格式\n时间采用`ISO8601`格式。如`YYYY-MM-DDTHH:MM:SSZ`\n"
     },
     "schemes": [
         "https"
@@ -1252,32 +1252,31 @@
         "timestamp": {
             "type": "string",
             "format": "date-time",
-            "description": "ISO 8601/RFC3339 formatted DateTime",
-            "example": "2016-11-22T02:25:01.000Z"
+            "description": "UTC and formatted as ISO8601",
+            "example": "2016-12-28T12:05:05.000Z"
         },
         "user": {
             "type": "object",
             "properties": {
                 "user_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "mbrXAWhtKocpgb5mp4XVZb7hz0x2"
                 },
                 "created_at": {
                     "$ref": "#/definitions/timestamp"
                 }
-            },
-            "example": {
-                "user_id": "mbrXAWhtKocpgb5mp4XVZb7hz0x2",
-                "created_at": "2016-11-21T02:25:01.000Z"
             }
         },
         "userToken": {
             "type": "object",
             "properties": {
                 "token": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "mbrXAWhtKocpgb5mp4XVZb7hz0x2"
                 },
                 "user_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Mev326aO4gODGY0exYt4bmDmX7u2"
                 },
                 "expire": {
                     "$ref": "#/definitions/timestamp"
@@ -1288,13 +1287,6 @@
                 "updated_at": {
                     "$ref": "#/definitions/timestamp"
                 }
-            },
-            "example": {
-                "user_id": "mbrXAWhtKocpgb5mp4XVZb7hz0x2",
-                "token": "Mev326aO4gODGY0exYt4bmDmX7u2",
-                "expire": "2016-11-22T02:25:01.000Z",
-                "created_at": "2016-11-21T02:25:01.000Z",
-                "updated_at": "2016-11-21T02:25:01.000Z"
             }
         },
         "newThing": {
@@ -1309,47 +1301,54 @@
                         "Wio Link v1.0",
                         "Wio Node v1.0"
                     ],
-                    "description": "节点设备型号"
+                    "description": "thing board model",
+                    "example": "Wio Link v1.0"
                 },
                 "name": {
                     "type": "string",
-                    "description": "节点设备名字"
+                    "description": "thing name",
+                    "example": "wio01"
                 }
-            },
-            "example": {
-                "board": "Wio Link v1.0",
-                "name": "wio01"
             }
         },
         "thing": {
             "type": "object",
             "properties": {
                 "thing_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "12a9d0922562456a9fdf0b55c20b29ea"
                 },
                 "user_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": 160979
                 },
                 "firmware_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": ""
                 },
                 "key": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "6eb8cccd6a7b48a5ba842c3f22683cea"
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "wio01"
                 },
                 "board": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "WioLink v1.0"
                 },
                 "online": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": false
                 },
                 "pp_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": ""
                 },
                 "page_url": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "http://localhost:16080/v2/things/12a9d0922562456a9fdf0b55c20b29ea/page"
                 },
                 "created_at": {
                     "$ref": "#/definitions/timestamp"
@@ -1357,29 +1356,18 @@
                 "updated_at": {
                     "$ref": "#/definitions/timestamp"
                 }
-            },
-            "example": {
-                "thing_id": "12a9d0922562456a9fdf0b55c20b29ea",
-                "user_id": 160979,
-                "firmware_id": "",
-                "key": "6eb8cccd6a7b48a5ba842c3f22683cea",
-                "name": "wio01",
-                "board": "WioLink v1.0",
-                "online": false,
-                "pp_id": "",
-                "page_url": "http://localhost:16080/v2/things/12a9d0922562456a9fdf0b55c20b29ea/page",
-                "created_at": "2016-11-21T03:27:04.000Z",
-                "updated_at": "2016-11-21T03:27:04.000Z"
             }
         },
         "ota": {
             "type": "object",
             "properties": {
                 "thing_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "049f867bad4f4f0db302df7798cd94e6"
                 },
                 "firmware_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "ad144ec3505641e29555e7de25aeaa08"
                 },
                 "ota_at": {
                     "$ref": "#/definitions/timestamp"
@@ -1393,29 +1381,24 @@
                         "processing",
                         "succeeded",
                         "failed"
-                    ]
+                    ],
+                    "example": "pending"
                 },
                 "status_text": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "waiting to be scheduled"
                 },
                 "updated_at": {
                     "$ref": "#/definitions/timestamp"
                 }
-            },
-            "example": {
-                "thing_id": "049f867bad4f4f0db302df7798cd94e6",
-                "firmware_id": "ad144ec3505641e29555e7de25aeaa08",
-                "ota_at": "2016-12-20T00:00:00.000Z",
-                "status": "pending",
-                "status_text": "waiting to be scheduled",
-                "updated_at": "2016-11-21T10:11:28.000Z"
             }
         },
         "newOta": {
             "type": "object",
             "properties": {
                 "firmware_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "ad144ec3505641e29555e7de25aeaa08"
                 },
                 "ota_at": {
                     "$ref": "#/definitions/timestamp"
@@ -1423,56 +1406,58 @@
             },
             "required": [
                 "firmware_id"
-            ],
-            "example": {
-                "firmware_id": "ad144ec3505641e29555e7de25aeaa08",
-                "ota_at": "2016-12-20T00:00:00.000Z"
-            }
+            ]
         },
         "updateOta": {
             "type": "object",
             "properties": {
                 "firmware_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "ad144ec3505641e29555e7de25aeaa08"
                 },
                 "ota_at": {
                     "$ref": "#/definitions/timestamp"
                 }
-            },
-            "example": {
-                "firmware_id": "ad144ec3505641e29555e7de25aeaa08",
-                "ota_at": "2016-12-20T00:00:00.000Z"
             }
         },
         "firmware": {
             "type": "object",
             "properties": {
                 "firmware_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "a6c91046291049e9a9357dd535c91598"
                 },
                 "user_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": 160979
                 },
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Hello-World"
                 },
                 "desc": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "First firmware"
                 },
                 "firmeare_type": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "flexible"
                 },
                 "fixed_url": {
-                    "type": "string"
+                    "type": "string",
+                    "example": ""
                 },
                 "bin_url": {
-                    "type": "string"
+                    "type": "string",
+                    "example": ""
                 },
                 "size": {
-                    "type": "string"
+                    "type": "string",
+                    "example": 120000
                 },
                 "sha": {
-                    "type": "string"
+                    "type": "string",
+                    "example": ""
                 },
                 "config": {
                     "$ref": "#/definitions/config"
@@ -1483,49 +1468,21 @@
                 "updated_at": {
                     "$ref": "#/definitions/timestamp"
                 }
-            },
-            "example": {
-                "firmware_id": "a6c91046291049e9a9357dd535c91598",
-                "user_id": 160979,
-                "name": "Hello-World",
-                "desc": "First firmware",
-                "firmware_type": "flexible",
-                "fixed_url": "",
-                "bin_url": "",
-                "size": 120000,
-                "sha": "",
-                "config": {
-                    "board_name": "Wio Link v1.0",
-                    "connections": []
-                },
-                "created_at": "2016-11-21T03:41:52.000Z",
-                "updated_at": "2016-11-21T03:41:52.000Z"
             }
         },
         "newFirmware": {
             "type": "object",
             "properties": {
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "myWioFirmware"
                 },
                 "desc": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "First firmware"
                 },
                 "config": {
                     "$ref": "#/definitions/config"
-                }
-            },
-            "example": {
-                "name": "myWioFirmware",
-                "desc": "First firmware",
-                "config": {
-                    "board_name": "Wio Link v1.0",
-                    "connections": [
-                        {
-                            "sku": "101020019-ffff",
-                            "port": "D0"
-                        }
-                    ]
                 }
             }
         },
@@ -1533,7 +1490,8 @@
             "type": "object",
             "properties": {
                 "board_name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Wio Link v1.0"
                 },
                 "connections": {
                     "type": "array",
@@ -1545,35 +1503,24 @@
             "required": [
                 "board_name",
                 "connections"
-            ],
-            "example": {
-                "board_name": "Wio Link v1.0",
-                "connections": [
-                    {
-                        "sku": "101020019-ffff",
-                        "port": "D0"
-                    }
-                ]
-            }
+            ]
         },
         "connection": {
             "type": "object",
             "properties": {
                 "sku": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "101020019-ffff"
                 },
                 "port": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "D0"
                 }
             },
             "required": [
                 "sku",
                 "port"
-            ],
-            "example": {
-                "sku": "101020019-ffff",
-                "port": "D0"
-            }
+            ]
         },
         "ulb": {
             "type": "object",
@@ -1609,10 +1556,6 @@
                 "updated_at": {
                     "$ref": "#/definitions/timestamp"
                 }
-            },
-            "example": {
-                "sku": 120599876,
-                "port": "D0"
             }
         },
         "binState": {
@@ -1624,7 +1567,8 @@
                         "building",
                         "success",
                         "failure"
-                    ]
+                    ],
+                    "example": "building"
                 },
                 "status_text": {
                     "type": "string"
@@ -1632,10 +1576,7 @@
             },
             "required": [
                 "status"
-            ],
-            "example": {
-                "status": "building"
-            }
+            ]
         },
         "bin": {
             "type": "object",
@@ -1649,20 +1590,24 @@
             "type": "object",
             "properties": {
                 "firmware_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "ad144ec3505641e29555e7de25aeaa08"
                 },
                 "github_url": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "https://github.com/awong1900/Wio_Sample_Project"
                 },
                 "status": {
                     "type": "string",
                     "enum": [
                         "pending",
                         "importing"
-                    ]
+                    ],
+                    "example": "pending"
                 },
                 "status_text": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "waiting import..."
                 },
                 "created_at": {
                     "$ref": "#/definitions/timestamp"
@@ -1670,42 +1615,35 @@
                 "updated_at": {
                     "$ref": "#/definitions/timestamp"
                 }
-            },
-            "example": {
-                "firmware_id": "ad144ec3505641e29555e7de25aeaa08",
-                "github_url": "https://github.com/awong1900/Wio_Sample_Project",
-                "status": "pending",
-                "status_text": "waiting import...",
-                "created_at": "2016-11-22T06:56:12.000Z",
-                "updated_at": "2016-11-22T06:56:12.000Z"
             }
         },
         "driverSrc": {
             "type": "object",
             "properties": {
                 "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "driver_x.h"
                 },
                 "content": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "here is the source code"
                 }
-            },
-            "example": {
-                "name": "driver_x.h",
-                "content": "here is the source code"
             }
         },
         "driverObject": {
             "type": "object",
             "properties": {
                 "user_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": 2349724074207
                 },
                 "sku": {
-                    "type": "string"
+                    "type": "string",
+                    "example": 12864565
                 },
                 "firmware_id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "ad144ec3505641e29555e7de25aeaa08"
                 },
                 "created_at": {
                     "$ref": "#/definitions/timestamp"
@@ -1715,30 +1653,6 @@
                 },
                 "firmware": {
                     "$ref": "#/definitions/firmware"
-                }
-            },
-            "example": {
-                "user_id": 2349724074207,
-                "sku": 12864565,
-                "firmware_id": "ad144ec3505641e29555e7de25aeaa08",
-                "created_at": "2016-11-25T16:56:12.000Z",
-                "updated_at": "2016-11-25T16:56:13.000Z",
-                "firmware": {
-                    "firmware_id": "a6c91046291049e9a9357dd535c91598",
-                    "user_id": 160979,
-                    "name": "Hello-World",
-                    "desc": "First firmware",
-                    "firmware_type": "flexible",
-                    "fixed_url": "",
-                    "bin_url": "",
-                    "size": 120000,
-                    "sha": "",
-                    "config": {
-                        "board_name": "Wio Link v1.0",
-                        "connections": []
-                    },
-                    "created_at": "2016-11-21T03:41:52.000Z",
-                    "updated_at": "2016-11-21T03:41:52.000Z"
                 }
             }
         }
