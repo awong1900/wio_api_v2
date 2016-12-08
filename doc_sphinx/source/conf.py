@@ -256,6 +256,7 @@ htmlhelp_basename = 'wiodoc'
 # }
 
 # Ten add
+import os
 on_rtd = os.environ.get('READTHEDOCS', None) == 'True'
 if on_rtd:
     latex_elements = {
