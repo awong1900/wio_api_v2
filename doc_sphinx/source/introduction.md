@@ -54,3 +54,9 @@ ULB主要提供一种途径让用户在Grove驱动之上定义更多的APIs。�
 ```
 `firmware_id`代表固件项目ID，系统会自动编译固件，并立即或定时通过OTA给Thing升级。
 `ota_at`，ISO8601格式时间戳。当定义时，代表定时升级，如果没有定义，代表立即升级。
+
+### Thing的API列表
+```
+/v2/things/{thing_id}/page
+```
+通过HTML页面的方式展示API列表，并有javascript功能，支持在线测试。
