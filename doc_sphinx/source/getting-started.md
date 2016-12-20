@@ -176,5 +176,3 @@ curl -X GET -H "Authorization: token af0cc2340935b6d98c46a247f8facb0c" "https://
 curl -X GET -H "Authorization: token af0cc2340935b6d98c46a247f8facb0c" "https://wio.forkthings.com/v2/things/cdf220ab8e9b49b2b23f9449a58cf239/ota"
 ```
 返回一个网页，通过列表方式展示可以使用的Grove Web APIs.
-
-完

@@ -3,16 +3,21 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to wio's documentation!
+Wio v2 IOT平台
 ===============================
 
-Contents:
+文档
+-------------
+
 
 .. toctree::
    :maxdepth: 2
 
    introduction
    getting-started
+   installation
+   guide
+   reference
 
 
 Indices and tables

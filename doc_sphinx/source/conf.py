@@ -377,3 +377,11 @@ texinfo_documents = [
 # For md file
 from recommonmark.parser import CommonMarkParser
 source_parsers = {'.md': CommonMarkParser}
+
+# On RTD we can't import sphinx_rtd_theme, but it will be applied by
+# default anyway.  This block will use the same theme when building locally
+# as on RTD.
+if not on_rtd:
+    import sphinx_rtd_theme
+    html_theme = 'sphinx_rtd_theme'
+    html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
