@@ -1,4 +1,4 @@
-# 完全通过RESTFul APIs使用Wio v2
+# Get Started
 本指导仅使用Wio v2 APIs和UDP烧写工具完成Thing的创建，注册，升级。
 本例子Wio服务器地址：https://wio.forkthings.com
 

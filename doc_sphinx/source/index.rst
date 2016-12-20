@@ -15,7 +15,6 @@ Wio v2 IOT平台
 
    introduction
    getting-started
-   installation
    guide
    reference
 
